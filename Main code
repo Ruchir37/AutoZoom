@@ -1,0 +1,69 @@
+package com.example.stepper
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var stepsContainer: LinearLayout
+    private lateinit var nextButton: TextView
+
+    private val steps = listOf(
+        Step("Registration", "Enter your mobile number to start."),
+        Step("Link bank & VPA", "Connect your SBI account."),
+        Step("Set Mpin", "Create unique Mpin for transaction")
+    )
+
+    private var currentStep = 0
+
+    data class Step(val title: String, val subtitle: String)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        stepsContainer = findViewById(R.id.stepsContainer)
+        nextButton = findViewById(R.id.nextStepButton)
+
+        renderSteps()
+
+        nextButton.setOnClickListener {
+            if (currentStep < steps.size - 1) {
+                currentStep++
+                renderSteps()
+            }
+        }
+    }
+
+    private fun renderSteps() {
+        stepsContainer.removeAllViews()
+        val inflater = LayoutInflater.from(this)
+
+        steps.forEachIndexed { index, step ->
+            val view = inflater.inflate(R.layout.step_item, stepsContainer, false)
+            val title = view.findViewById<TextView>(R.id.stepTitle)
+            val subtitle = view.findViewById<TextView>(R.id.stepSubtitle)
+            val icon = view.findViewById<ImageView>(R.id.stepIcon)
+
+            title.text = step.title
+            subtitle.text = step.subtitle
+
+            if (index < currentStep) {
+                icon.setImageResource(R.drawable.ic_check_circle)
+                icon.setColorFilter(resources.getColor(android.R.color.holo_green_dark))
+            } else if (index == currentStep) {
+                icon.setImageResource(R.drawable.ic_radio_button_checked)
+                icon.setColorFilter(resources.getColor(android.R.color.holo_blue_dark))
+            } else {
+                icon.setImageResource(R.drawable.ic_radio_button_unchecked)
+                icon.setColorFilter(resources.getColor(android.R.color.darker_gray))
+            }
+
+            stepsContainer.addView(view)
+        }
+    }
+}
