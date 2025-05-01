@@ -1,0 +1,110 @@
+package com.example.stepperapp;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.OvershootInterpolator;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+       // View line1to2 = findViewById(R.id.line1to2);
+
+
+
+        View step1 = findViewById(R.id.step1);
+        View step2 = findViewById(R.id.step2);
+        View step3 = findViewById(R.id.step3);
+
+        setupStep(step1, "Registration", "Enter your mobile number to start.", true);
+        setupStep(step2, "Link bank & VPA", "Connect your SBI account.", true);
+        setupStep(step3, "Set Mpin", "Create unique Mpin for transaction", false);
+
+        /*animateStep(step1, 0);
+        animateStep(step2, 300);
+        animateStep(step3, 600);*/
+
+        Button startButton = findViewById(R.id.startButton);
+        startButton.setOnClickListener(v ->
+                Toast.makeText(this, "Proceeding...", Toast.LENGTH_SHORT).show()
+        );
+
+        //animateLine(step1, 300);
+
+      /*  line1to2.setScaleY(0f);
+        line1to2.animate()
+                .scaleY(1f)
+                .setDuration(1200)
+                .setStartDelay(300)
+                .setInterpolator(new LinearInterpolator())
+                .start();
+        animateLine(step1, 800); // animate the line below second check*/
+        View line1to2 = findViewById(R.id.line1to2);
+        View line2to3 = findViewById(R.id.line2to3);
+        // Animate line 1 → 2
+        line1to2.animate()
+                .scaleY(1f)
+                .setDuration(1500)
+                .setStartDelay(1000)
+                .setInterpolator(new LinearInterpolator())
+                .withEndAction(() -> {
+                    // Animate line 2 → 3 after 1 finishes
+                   /* line2to3.animate()
+                            .scaleY(1f)
+                            .setDuration(1500)
+                            .setInterpolator(new LinearInterpolator())
+                            .start();*/
+                })
+                .start();
+    }
+
+ /*   private void animateLine(View stepView, long delay) {
+        View line = stepView.findViewById(R.id.stepLine);
+        line.setScaleY(0f);
+        line.setVisibility(View.VISIBLE);
+        line.animate()
+                .scaleY(1f)
+                .setDuration(8000) // Adjust this as needed
+                .setStartDelay(delay)
+                .setInterpolator(new OvershootInterpolator()) // or use AccelerateDecelerateInterpolator
+                .start();
+    }*/
+
+    private void setupStep(View stepView, String title, String desc, boolean checked) {
+        TextView stepTitle = stepView.findViewById(R.id.stepTitle);
+        TextView stepDesc = stepView.findViewById(R.id.stepDescription);
+        ImageView checkIcon = stepView.findViewById(R.id.checkIcon);
+
+        stepTitle.setText(title);
+        stepDesc.setText(desc);
+        checkIcon.setVisibility(checked ? View.VISIBLE : View.INVISIBLE);
+    }
+
+    private void animateStep(View view, long delay) {
+        view.setAlpha(0f);
+        view.setTranslationY(50);
+        view.animate()
+                .alpha(1f)
+                .translationY(0)
+                .setStartDelay(delay)
+                .setDuration(400)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+    }
+
+}
