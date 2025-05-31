@@ -6,31 +6,33 @@ public class MainActivity extends AppCompatActivity {
     private Handler bannerHandler = new Handler();
     private int currentPage = 0;
     private List<Integer> bannerImages;
+    private LinearLayout bankContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
         bannerViewPager = findViewById(R.id.bannerViewPager);
         tabIndicator = findViewById(R.id.tabIndicator);
+        bankContainer = findViewById(R.id.bankContainer);
 
+        setupBanners();
+        populateBankCards();
+    }
+
+    private void setupBanners() {
         bannerImages = Arrays.asList(
-                R.drawable.sample_banner,  // Replace with your drawable
+                R.drawable.sample_banner,
                 R.drawable.sample_banner_2,
                 R.drawable.sample_banner_3
         );
 
         bannerAdapter = new BannerAdapter(bannerImages);
         bannerViewPager.setAdapter(bannerAdapter);
-
         new TabLayoutMediator(tabIndicator, bannerViewPager,
             (tab, position) -> {}).attach();
 
-        startAutoScroll();
-    }
-
-    private void startAutoScroll() {
         bannerHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -41,6 +43,20 @@ public class MainActivity extends AppCompatActivity {
                 bannerHandler.postDelayed(this, 3000);
             }
         }, 3000);
+    }
+
+    private void populateBankCards() {
+        String[] bankNames = {"Axis Bank", "SBI", "HDFC Bank"};
+        String[] accountNos = {"XXX0968", "XXX1234", "XXX5678"};
+
+        for (int i = 0; i < bankNames.length; i++) {
+            View card = LayoutInflater.from(this).inflate(R.layout.item_bank_card, bankContainer, false);
+
+            ((TextView) card.findViewById(R.id.bankName)).setText(bankNames[i]);
+            ((TextView) card.findViewById(R.id.bankAccount)).setText(accountNos[i]);
+
+            bankContainer.addView(card);
+        }
     }
 
     @Override
