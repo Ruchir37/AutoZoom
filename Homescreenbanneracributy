@@ -1,0 +1,51 @@
+public class MainActivity extends AppCompatActivity {
+
+    private ViewPager2 bannerViewPager;
+    private TabLayout tabIndicator;
+    private BannerAdapter bannerAdapter;
+    private Handler bannerHandler = new Handler();
+    private int currentPage = 0;
+    private List<Integer> bannerImages;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        bannerViewPager = findViewById(R.id.bannerViewPager);
+        tabIndicator = findViewById(R.id.tabIndicator);
+
+        bannerImages = Arrays.asList(
+                R.drawable.sample_banner,  // Replace with your drawable
+                R.drawable.sample_banner_2,
+                R.drawable.sample_banner_3
+        );
+
+        bannerAdapter = new BannerAdapter(bannerImages);
+        bannerViewPager.setAdapter(bannerAdapter);
+
+        new TabLayoutMediator(tabIndicator, bannerViewPager,
+            (tab, position) -> {}).attach();
+
+        startAutoScroll();
+    }
+
+    private void startAutoScroll() {
+        bannerHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (currentPage == bannerImages.size()) {
+                    currentPage = 0;
+                }
+                bannerViewPager.setCurrentItem(currentPage++, true);
+                bannerHandler.postDelayed(this, 3000);
+            }
+        }, 3000);
+    }
+
+    @Override
+    protected void onDestroy() {
+        bannerHandler.removeCallbacksAndMessages(null);
+        super.onDestroy();
+    }
+}
