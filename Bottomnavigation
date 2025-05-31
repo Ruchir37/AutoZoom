@@ -1,0 +1,123 @@
+<!-- Bottom Navigation -->
+<LinearLayout
+    android:id="@+id/bottomNavigation"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@android:color/white"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    android:paddingVertical="4dp"
+    android:elevation="8dp">
+
+    <!-- Home -->
+    <LinearLayout
+        android:id="@+id/navHome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_home"
+            android:tint="#000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:textSize="10sp"
+            android:textColor="#000"/>
+    </LinearLayout>
+
+    <!-- Mandate -->
+    <LinearLayout
+        android:id="@+id/navMandate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_mandate"
+            android:tint="#000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mandate"
+            android:textSize="10sp"
+            android:textColor="#000"/>
+    </LinearLayout>
+
+    <!-- Center QR Button -->
+    <FrameLayout
+        android:id="@+id/qrScannerButton"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginTop="-28dp"
+        android:background="@drawable/bg_qr_circle"
+        android:elevation="8dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_qr"
+            android:tint="#fff"/>
+    </FrameLayout>
+
+    <!-- Services -->
+    <LinearLayout
+        android:id="@+id/navServices"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_services"
+            android:tint="#000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Services"
+            android:textSize="10sp"
+            android:textColor="#000"/>
+    </LinearLayout>
+
+    <!-- History -->
+    <LinearLayout
+        android:id="@+id/navHistory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_history"
+            android:tint="#000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="History"
+            android:textSize="10sp"
+            android:textColor="#000"/>
+    </LinearLayout>
+</LinearLayout>
