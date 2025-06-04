@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class TimeCheck {
     public static void main(String[] args) {
-        String inputTime = "02-06-2025 07:54:10 PM";  // Example input
+        String inputTime = "04-06-2025 05:08:10 PM";  // 4th June 2025, 5:08 PM
         boolean isMoreThan2HoursAgo = isTimeMoreThan2HoursAgo(inputTime);
         System.out.println("Is time more than 2 hours ago: " + isMoreThan2HoursAgo);
     }
@@ -12,10 +12,16 @@ public class TimeCheck {
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a");
             Date parsedDate = sdf.parse(inputTime);
-            long now = System.currentTimeMillis();
-            long timeDiffMillis = now - parsedDate.getTime();
 
-            // Check if the input time is more than 2 hours ago
+            long currentTimeMillis = System.currentTimeMillis();
+            long inputTimeMillis = parsedDate.getTime();
+            long timeDiffMillis = currentTimeMillis - inputTimeMillis;
+
+            System.out.println("Parsed Time: " + parsedDate);
+            System.out.println("Current Time: " + new Date(currentTimeMillis));
+            System.out.println("Difference in Minutes: " + timeDiffMillis / (60 * 1000));
+
+            // Check if input time is more than 2 hours ago
             return timeDiffMillis > 2 * 60 * 60 * 1000;
 
         } catch (Exception e) {
