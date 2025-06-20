@@ -1,0 +1,75 @@
+public class SetPinActivity extends AppCompatActivity {
+
+    private StringBuilder enteredPin = new StringBuilder();
+    private boolean isPinVisible = false;
+    private TextView viewHidePinBtn;
+    private LinearLayout pinDotsLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_set_pin);
+
+        pinDotsLayout = findViewById(R.id.pinDotsLayout);
+        viewHidePinBtn = findViewById(R.id.viewHidePinBtn);
+
+        // Assign click listeners for 0-9 buttons
+        for (int i = 0; i <= 9; i++) {
+            int resID = getResources().getIdentifier("btn" + i, "id", getPackageName());
+            findViewById(resID).setOnClickListener(v -> appendDigit(((Button) v).getText().toString()));
+        }
+
+        findViewById(R.id.btnDelete).setOnClickListener(v -> deleteDigit());
+        findViewById(R.id.btnDone).setOnClickListener(v -> onDoneClicked());
+
+        viewHidePinBtn.setOnClickListener(v -> togglePinVisibility());
+
+        updatePinDots();
+    }
+
+    private void appendDigit(String digit) {
+        if (enteredPin.length() < 6) {
+            enteredPin.append(digit);
+            updatePinDots();
+        }
+    }
+
+    private void deleteDigit() {
+        if (enteredPin.length() > 0) {
+            enteredPin.deleteCharAt(enteredPin.length() - 1);
+            updatePinDots();
+        }
+    }
+
+    private void togglePinVisibility() {
+        isPinVisible = !isPinVisible;
+        updatePinDots();
+    }
+
+    private void updatePinDots() {
+        for (int i = 0; i < 6; i++) {
+            View dot = pinDotsLayout.getChildAt(i);
+            if (i < enteredPin.length()) {
+                if (isPinVisible) {
+                    ((TextView) dot).setText(String.valueOf(enteredPin.charAt(i)));
+                    dot.setBackground(null);
+                } else {
+                    dot.setBackground(ContextCompat.getDrawable(this, R.drawable.dot_active));
+                }
+            } else {
+                dot.setBackground(ContextCompat.getDrawable(this, R.drawable.dot_inactive));
+            }
+        }
+
+        viewHidePinBtn.setText(isPinVisible ? "🙈 Hide PIN" : "👁 View PIN");
+    }
+
+    private void onDoneClicked() {
+        if (enteredPin.length() == 6) {
+            // Proceed with PIN save or confirmation
+            Toast.makeText(this, "PIN Saved: " + enteredPin, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Enter 6 digit PIN", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
