@@ -2,7 +2,7 @@ public class SetPinActivity extends AppCompatActivity {
 
     private StringBuilder pinBuilder = new StringBuilder();
     private boolean isPinVisible = false;
-    private TextView[] pinDigits;
+    private TextView[] pinViews;
     private TextView toggleView;
 
     @Override
@@ -10,7 +10,7 @@ public class SetPinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_pin);
 
-        pinDigits = new TextView[] {
+        pinViews = new TextView[]{
                 findViewById(R.id.pin1),
                 findViewById(R.id.pin2),
                 findViewById(R.id.pin3),
@@ -23,58 +23,67 @@ public class SetPinActivity extends AppCompatActivity {
         toggleView.setOnClickListener(v -> {
             isPinVisible = !isPinVisible;
             toggleView.setText(isPinVisible ? "🙈 Hide PIN" : "👁 View PIN");
-            updatePinDisplay();
+            updatePinViews();
         });
 
-        setupKeypad();
+        setupDigitButtons();
+        findViewById(R.id.btnDelete).setOnClickListener(v -> deleteDigit());
+        findViewById(R.id.btnDone).setOnClickListener(v -> onDonePressed());
+
+        updatePinViews();
     }
 
-    private void setupKeypad() {
-        View.OnClickListener digitClick = v -> {
+    private void setupDigitButtons() {
+        View.OnClickListener digitListener = v -> {
             if (pinBuilder.length() < 6) {
-                Button b = (Button) v;
-                pinBuilder.append(b.getText().toString());
-                updatePinDisplay();
+                Button btn = (Button) v;
+                pinBuilder.append(btn.getText().toString());
+                updatePinViews();
             }
         };
 
         for (int i = 0; i <= 9; i++) {
-            int id = getResources().getIdentifier("btn" + i, "id", getPackageName());
-            Button b = findViewById(id);
-            if (b != null) b.setOnClickListener(digitClick);
+            int resId = getResources().getIdentifier("btn" + i, "id", getPackageName());
+            Button button = findViewById(resId);
+            if (button != null) {
+                button.setText(String.valueOf(i));
+                button.setOnClickListener(digitListener);
+            }
         }
-
-        findViewById(R.id.btnDelete).setOnClickListener(v -> {
-            int len = pinBuilder.length();
-            if (len > 0) {
-                pinBuilder.deleteCharAt(len - 1);
-                updatePinDisplay();
-            }
-        });
-
-        findViewById(R.id.btnDone).setOnClickListener(v -> {
-            if (pinBuilder.length() == 6) {
-                Toast.makeText(this, "PIN Set: " + pinBuilder, Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Enter 6-digit PIN", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
-    private void updatePinDisplay() {
+    private void deleteDigit() {
+        int len = pinBuilder.length();
+        if (len > 0) {
+            pinBuilder.deleteCharAt(len - 1);
+            updatePinViews();
+        }
+    }
+
+    private void updatePinViews() {
         for (int i = 0; i < 6; i++) {
+            TextView dot = pinViews[i];
             if (i < pinBuilder.length()) {
                 if (isPinVisible) {
-                    pinDigits[i].setText(String.valueOf(pinBuilder.charAt(i)));
-                    pinDigits[i].setBackground(null);
+                    dot.setText(String.valueOf(pinBuilder.charAt(i)));
+                    dot.setBackground(null);
                 } else {
-                    pinDigits[i].setText("");
-                    pinDigits[i].setBackground(ContextCompat.getDrawable(this, R.drawable.dot_active));
+                    dot.setText("");
+                    dot.setBackground(ContextCompat.getDrawable(this, R.drawable.dot_active));
                 }
             } else {
-                pinDigits[i].setText("");
-                pinDigits[i].setBackground(ContextCompat.getDrawable(this, R.drawable.dot_inactive));
+                dot.setText("");
+                dot.setBackground(ContextCompat.getDrawable(this, R.drawable.dot_inactive));
             }
+        }
+    }
+
+    private void onDonePressed() {
+        if (pinBuilder.length() == 6) {
+            Toast.makeText(this, "PIN Entered: " + pinBuilder.toString(), Toast.LENGTH_SHORT).show();
+            // Proceed to next step or save
+        } else {
+            Toast.makeText(this, "Please enter 6-digit PIN", Toast.LENGTH_SHORT).show();
         }
     }
 }
