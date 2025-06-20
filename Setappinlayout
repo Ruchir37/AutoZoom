@@ -4,14 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
-    android:background="#F5F4F8">
+    android:background="#F5F4F8"
+    android:gravity="center_horizontal"
+    android:paddingTop="60dp"
+    android:paddingBottom="24dp">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/bhim_sbi_logo"
-        android:layout_marginBottom="16dp"/>
+        android:contentDescription="Logo"
+        android:layout_marginBottom="24dp"/>
 
     <TextView
         android:id="@+id/titleText"
@@ -20,62 +23,65 @@
         android:text="Set App PIN"
         android:textSize="18sp"
         android:textColor="#000"
-        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp" />
 
     <LinearLayout
-        android:id="@+id/pinDotsLayout"
+        android:id="@+id/pinContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:gravity="center">
 
-        <!-- 6 PIN indicators -->
-        <View style="@style/dot_inactive"/>
-        <View style="@style/dot_inactive"/>
-        <View style="@style/dot_inactive"/>
-        <View style="@style/dot_inactive"/>
-        <View style="@style/dot_inactive"/>
-        <View style="@style/dot_inactive"/>
+        <!-- TextViews for PIN digits -->
+        <TextView style="@style/PinDigit" android:id="@+id/pin1"/>
+        <TextView style="@style/PinDigit" android:id="@+id/pin2"/>
+        <TextView style="@style/PinDigit" android:id="@+id/pin3"/>
+        <TextView style="@style/PinDigit" android:id="@+id/pin4"/>
+        <TextView style="@style/PinDigit" android:id="@+id/pin5"/>
+        <TextView style="@style/PinDigit" android:id="@+id/pin6"/>
     </LinearLayout>
 
     <TextView
-        android:id="@+id/viewHidePinBtn"
+        android:id="@+id/toggleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="👁 View PIN"
         android:textColor="#3F51B5"
         android:textSize="16sp"
-        android:padding="8dp" />
+        android:layout_marginBottom="24dp" />
 
+    <!-- Custom Numeric Keypad -->
     <GridLayout
-        android:id="@+id/keypadLayout"
+        android:id="@+id/keypad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="3"
-        android:layout_margin="24dp">
+        android:rowCount="4"
+        android:layout_marginHorizontal="32dp">
 
-        <!-- Buttons 1 to 9 -->
-        <include layout="@layout/key_button" android:id="@+id/btn1"/>
-        <include layout="@layout/key_button" android:id="@+id/btn2"/>
-        <include layout="@layout/key_button" android:id="@+id/btn3"/>
-        <include layout="@layout/key_button" android:id="@+id/btn4"/>
-        <include layout="@layout/key_button" android:id="@+id/btn5"/>
-        <include layout="@layout/key_button" android:id="@+id/btn6"/>
-        <include layout="@layout/key_button" android:id="@+id/btn7"/>
-        <include layout="@layout/key_button" android:id="@+id/btn8"/>
-        <include layout="@layout/key_button" android:id="@+id/btn9"/>
+        <!-- 1 to 9 -->
+        <include layout="@layout/num_button" android:id="@+id/btn1"/>
+        <include layout="@layout/num_button" android:id="@+id/btn2"/>
+        <include layout="@layout/num_button" android:id="@+id/btn3"/>
+        <include layout="@layout/num_button" android:id="@+id/btn4"/>
+        <include layout="@layout/num_button" android:id="@+id/btn5"/>
+        <include layout="@layout/num_button" android:id="@+id/btn6"/>
+        <include layout="@layout/num_button" android:id="@+id/btn7"/>
+        <include layout="@layout/num_button" android:id="@+id/btn8"/>
+        <include layout="@layout/num_button" android:id="@+id/btn9"/>
 
-        <!-- Backspace, 0, Done -->
+        <!-- Delete, 0, Done -->
         <ImageButton
             android:id="@+id/btnDelete"
             android:layout_width="0dp"
             android:layout_height="64dp"
             android:layout_columnWeight="1"
             android:background="@null"
-            android:src="@drawable/ic_backspace" />
+            android:src="@drawable/ic_backspace"
+            android:contentDescription="Delete" />
 
-        <include layout="@layout/key_button" android:id="@+id/btn0"/>
+        <include layout="@layout/num_button" android:id="@+id/btn0"/>
 
         <ImageButton
             android:id="@+id/btnDone"
@@ -83,8 +89,7 @@
             android:layout_height="64dp"
             android:layout_columnWeight="1"
             android:background="@null"
-            android:src="@drawable/ic_check" />
-
+            android:src="@drawable/ic_check"
+            android:contentDescription="Done" />
     </GridLayout>
-
 </LinearLayout>
