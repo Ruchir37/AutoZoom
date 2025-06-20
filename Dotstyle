@@ -1,0 +1,6 @@
+<style name="dot_inactive">
+    <item name="android:layout_width">12dp</item>
+    <item name="android:layout_height">12dp</item>
+    <item name="android:layout_margin">4dp</item>
+    <item name="android:background">@drawable/dot_inactive</item>
+</style>
