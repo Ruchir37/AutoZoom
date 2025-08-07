@@ -1,0 +1,24 @@
+EditText amountEditText = findViewById(R.id.editTextAmount);
+
+amountEditText.addTextChangedListener(new TextWatcher() {
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String input = s.toString();
+        if (!input.isEmpty()) {
+            try {
+                double value = Double.parseDouble(input);
+                if (value > 5000) {
+                    amountEditText.setError("Maximum amount is 5000");
+                }
+            } catch (NumberFormatException e) {
+                amountEditText.setError("Invalid amount");
+            }
+        }
+    }
+});
