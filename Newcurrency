@@ -1,0 +1,76 @@
+public class CurrencyToWords {
+
+    private static final String[] units = {
+        "", "One", "Two", "Three", "Four", "Five",
+        "Six", "Seven", "Eight", "Nine", "Ten", "Eleven",
+        "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
+        "Seventeen", "Eighteen", "Nineteen"
+    };
+
+    private static final String[] tens = {
+        "", "", "Twenty", "Thirty", "Forty", "Fifty",
+        "Sixty", "Seventy", "Eighty", "Ninety"
+    };
+
+    public static String convertToRupeesAndPaise(double amount) {
+        if (amount > 5000) return "Amount exceeds limit";
+
+        long rupees = (long) amount;
+        int paise = (int) Math.round((amount - rupees) * 100);
+
+        StringBuilder result = new StringBuilder();
+
+        if (rupees > 0) {
+            result.append(convertNumberToWords(rupees)).append(" Rupees");
+        }
+
+        if (paise > 0) {
+            if (rupees > 0) result.append(" and ");
+            result.append(convertNumberToWords(paise)).append(" Paise");
+        }
+
+        if (rupees == 0 && paise == 0) {
+            result.append("Zero Rupees");
+        }
+
+        return result.toString().trim();
+    }
+
+    private static String convertNumberToWords(long number) {
+        if (number == 0) return "Zero";
+
+        StringBuilder words = new StringBuilder();
+
+        if (number / 10000000 > 0) {
+            words.append(convertNumberToWords(number / 10000000)).append(" Crore ");
+            number %= 10000000;
+        }
+
+        if (number / 100000 > 0) {
+            words.append(convertNumberToWords(number / 100000)).append(" Lakh ");
+            number %= 100000;
+        }
+
+        if (number / 1000 > 0) {
+            words.append(convertNumberToWords(number / 1000)).append(" Thousand ");
+            number %= 1000;
+        }
+
+        if (number / 100 > 0) {
+            words.append(convertNumberToWords(number / 100)).append(" Hundred ");
+            number %= 100;
+        }
+
+        if (number > 0) {
+            if (words.length() > 0) words.append("and ");
+            words.append(twoDigitToWords((int) number));
+        }
+
+        return words.toString().trim();
+    }
+
+    private static String twoDigitToWords(int number) {
+        if (number < 20) return units[number];
+        return tens[number / 10] + (number % 10 > 0 ? " " + units[number % 10] : "");
+    }
+}
