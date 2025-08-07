@@ -13,25 +13,34 @@ amountEditText.addTextChangedListener(new TextWatcher() {
     public void afterTextChanged(Editable s) {
         String input = s.toString();
 
-        if (!input.isEmpty()) {
-            try {
-                double value = Double.parseDouble(input);
+        if (input.isEmpty()) return;
 
-                // Block if value is greater than 5000.00
-                if (value > 5000.00) {
-                    amountEditText.removeTextChangedListener(this);
-                    amountEditText.setText(lastValid);
-                    amountEditText.setSelection(lastValid.length());
-                    amountEditText.addTextChangedListener(this);
+        // Prevent multiple leading zeros like 0000, 0123
+        if (input.matches("^0\\d+")) {
+            amountEditText.removeTextChangedListener(this);
+            amountEditText.setText("0");
+            amountEditText.setSelection(1);
+            amountEditText.addTextChangedListener(this);
+            Toast.makeText(getApplicationContext(), "Leading zeros are not allowed", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-                    Toast.makeText(getApplicationContext(), "Amount cannot exceed 5000.00", Toast.LENGTH_SHORT).show();
-                } else {
-                    lastValid = input; // Save valid input
-                }
-            } catch (NumberFormatException e) {
-                // Optional: show error
-                amountEditText.setError("Invalid number format");
+        try {
+            double value = Double.parseDouble(input);
+
+            // Restrict max value to 5000.00
+            if (value > 5000.00) {
+                amountEditText.removeTextChangedListener(this);
+                amountEditText.setText(lastValid);
+                amountEditText.setSelection(lastValid.length());
+                amountEditText.addTextChangedListener(this);
+                Toast.makeText(getApplicationContext(), "Amount cannot exceed 5000", Toast.LENGTH_SHORT).show();
+            } else {
+                lastValid = input;  // Store valid input
             }
+
+        } catch (NumberFormatException e) {
+            amountEditText.setError("Invalid input");
         }
     }
 });
