@@ -1,0 +1,37 @@
+EditText amountEditText = findViewById(R.id.editTextAmount);
+
+amountEditText.addTextChangedListener(new TextWatcher() {
+    private String lastValid = "";
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        String input = s.toString();
+
+        if (!input.isEmpty()) {
+            try {
+                double value = Double.parseDouble(input);
+                if (value > 5000) {
+                    // Revert to last valid value
+                    amountEditText.removeTextChangedListener(this);
+                    amountEditText.setText(lastValid);
+                    amountEditText.setSelection(lastValid.length());
+                    amountEditText.addTextChangedListener(this);
+
+                    // Show warning
+                    Toast.makeText(getApplicationContext(), "Amount cannot exceed 5000", Toast.LENGTH_SHORT).show();
+                } else {
+                    lastValid = input; // Store valid input
+                }
+            } catch (NumberFormatException e) {
+                // Optional: reset if invalid format
+                amountEditText.setError("Invalid input");
+            }
+        }
+    }
+});
