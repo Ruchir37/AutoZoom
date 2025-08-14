@@ -4,10 +4,8 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
@@ -20,6 +18,7 @@ public class BackDoneAwareEditText extends AppCompatEditText {
 
     private KeyboardListener keyboardListener;
     private boolean isKeyboardVisible = false;
+    private boolean ignoreNextKeyboardClose = false;
 
     public BackDoneAwareEditText(Context context) {
         super(context);
@@ -41,6 +40,7 @@ public class BackDoneAwareEditText extends AppCompatEditText {
         setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (keyboardListener != null) keyboardListener.onDonePressed();
+                ignoreNextKeyboardClose = true; // Prevent double toast
                 return true;
             }
             return false;
@@ -56,8 +56,10 @@ public class BackDoneAwareEditText extends AppCompatEditText {
             boolean isNowVisible = keypadHeight > screenHeight * 0.15;
 
             if (isKeyboardVisible && !isNowVisible && hasFocus()) {
-                // Keyboard was visible, now hidden
-                if (keyboardListener != null) keyboardListener.onKeyboardClosed();
+                if (!ignoreNextKeyboardClose && keyboardListener != null) {
+                    keyboardListener.onKeyboardClosed();
+                }
+                ignoreNextKeyboardClose = false; // reset
             }
             isKeyboardVisible = isNowVisible;
         });
@@ -69,7 +71,7 @@ public class BackDoneAwareEditText extends AppCompatEditText {
 
     @Override
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
-        // Back key detection (still triggers keyboardClosed)
+        // Back key detection
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
             if (keyboardListener != null) keyboardListener.onKeyboardClosed();
         }
