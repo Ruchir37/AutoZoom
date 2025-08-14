@@ -1,0 +1,73 @@
+public class BackDoneAwareEditText extends AppCompatEditText {
+
+    public interface KeyboardListener {
+        void onDonePressed();
+        void onBackPressed();
+    }
+
+    private KeyboardListener keyboardListener;
+
+    public BackDoneAwareEditText(Context context) {
+        super(context);
+        init();
+    }
+
+    public BackDoneAwareEditText(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public BackDoneAwareEditText(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+        // Listen for "Done" key
+        setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (keyboardListener != null) keyboardListener.onDonePressed();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    public void setKeyboardListener(KeyboardListener listener) {
+        this.keyboardListener = listener;
+    }
+
+    @Override
+    public boolean dispatchKeyEventPreIme(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
+            if (keyboardListener != null) keyboardListener.onBackPressed();
+        }
+        return super.dispatchKeyEventPreIme(event);
+    }
+}
+
+
+
+
+BackDoneAwareEditText editText = findViewById(R.id.myEditText);
+
+editText.setKeyboardListener(new BackDoneAwareEditText.KeyboardListener() {
+    @Override
+    public void onDonePressed() {
+        Toast.makeText(MainActivity.this, "Done pressed!", Toast.LENGTH_SHORT).show();
+        hideKeyboard(editText);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(MainActivity.this, "Back pressed (keyboard closed)!", Toast.LENGTH_SHORT).show();
+    }
+});
+
+private void hideKeyboard(View view) {
+    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    if (imm != null) {
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+}
+
