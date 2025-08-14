@@ -1,11 +1,25 @@
+package com.example.yourapp;
+
+import android.content.Context;
+import android.graphics.Rect;
+import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatEditText;
+
 public class BackDoneAwareEditText extends AppCompatEditText {
 
     public interface KeyboardListener {
         void onDonePressed();
-        void onBackPressed();
+        void onKeyboardClosed();
     }
 
     private KeyboardListener keyboardListener;
+    private boolean isKeyboardVisible = false;
 
     public BackDoneAwareEditText(Context context) {
         super(context);
@@ -23,13 +37,29 @@ public class BackDoneAwareEditText extends AppCompatEditText {
     }
 
     private void init() {
-        // Listen for "Done" key
+        // Detect Done key
         setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (keyboardListener != null) keyboardListener.onDonePressed();
                 return true;
             }
             return false;
+        });
+
+        // Detect keyboard close (back OR down arrow)
+        getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+            Rect r = new Rect();
+            getWindowVisibleDisplayFrame(r);
+            int screenHeight = getRootView().getHeight();
+            int keypadHeight = screenHeight - r.bottom;
+
+            boolean isNowVisible = keypadHeight > screenHeight * 0.15;
+
+            if (isKeyboardVisible && !isNowVisible && hasFocus()) {
+                // Keyboard was visible, now hidden
+                if (keyboardListener != null) keyboardListener.onKeyboardClosed();
+            }
+            isKeyboardVisible = isNowVisible;
         });
     }
 
@@ -39,35 +69,10 @@ public class BackDoneAwareEditText extends AppCompatEditText {
 
     @Override
     public boolean dispatchKeyEventPreIme(KeyEvent event) {
+        // Back key detection (still triggers keyboardClosed)
         if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_UP) {
-            if (keyboardListener != null) keyboardListener.onBackPressed();
+            if (keyboardListener != null) keyboardListener.onKeyboardClosed();
         }
         return super.dispatchKeyEventPreIme(event);
     }
 }
-
-
-
-
-BackDoneAwareEditText editText = findViewById(R.id.myEditText);
-
-editText.setKeyboardListener(new BackDoneAwareEditText.KeyboardListener() {
-    @Override
-    public void onDonePressed() {
-        Toast.makeText(MainActivity.this, "Done pressed!", Toast.LENGTH_SHORT).show();
-        hideKeyboard(editText);
-    }
-
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(MainActivity.this, "Back pressed (keyboard closed)!", Toast.LENGTH_SHORT).show();
-    }
-});
-
-private void hideKeyboard(View view) {
-    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-    if (imm != null) {
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-}
-
