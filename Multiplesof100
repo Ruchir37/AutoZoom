@@ -2,7 +2,7 @@
  * Validates if amount is in multiples of 100.
  *
  * @param input The string entered in EditText
- * @param min Minimum allowed value (e.g., 100)
+ * @param min Minimum allowed value (0 = no minimum)
  * @param max Maximum allowed value (0 = unlimited)
  * @return true if valid, false otherwise
  */
@@ -11,13 +11,25 @@ public static boolean isValidAmount(String input, int min, int max) {
         return false;
     }
 
+    // If both min and max are 0 => no validation required
+    if (min == 0 && max == 0) {
+        return true;
+    }
+
     try {
-        int value = Integer.parseInt(input.trim());
+        double value = Double.parseDouble(input.trim());
 
-        if (value < min) return false;
-        if (max > 0 && value > max) return false; // only check if max > 0
+        // Min check (only if min > 0)
+        if (min > 0 && value < min) return false;
 
-        return value % 100 == 0;   // ✅ multiple of 100 check
+        // Max check (only if max > 0)
+        if (max > 0 && value > max) return false;
+
+        // Multiple of 100 check (integer part only, paise allowed)
+        double rupees = Math.floor(value); // take integer rupees
+        if (rupees % 100 != 0) return false;
+
+        return true;
 
     } catch (NumberFormatException e) {
         return false;
