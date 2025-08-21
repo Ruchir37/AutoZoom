@@ -1,35 +1,22 @@
 /**
  * Validates if amount is in multiples of 100.
+ * Allows decimals (e.g., 100.00, 200.50) but rupee part must be multiple of 100.
  *
  * @param input The string entered in EditText
- * @param min Minimum allowed value (0 = no minimum)
- * @param max Maximum allowed value (0 = unlimited)
  * @return true if valid, false otherwise
  */
-public static boolean isValidAmount(String input, int min, int max) {
+public static boolean isValidAmount(String input) {
     if (input == null || input.trim().isEmpty()) {
         return false;
-    }
-
-    // If both min and max are 0 => no validation required
-    if (min == 0 && max == 0) {
-        return true;
     }
 
     try {
         double value = Double.parseDouble(input.trim());
 
-        // Min check (only if min > 0)
-        if (min > 0 && value < min) return false;
+        // Take only integer part (rupees) and check multiples of 100
+        long rupees = (long) Math.floor(value);
 
-        // Max check (only if max > 0)
-        if (max > 0 && value > max) return false;
-
-        // Multiple of 100 check (integer part only, paise allowed)
-        double rupees = Math.floor(value); // take integer rupees
-        if (rupees % 100 != 0) return false;
-
-        return true;
+        return rupees % 100 == 0;
 
     } catch (NumberFormatException e) {
         return false;
