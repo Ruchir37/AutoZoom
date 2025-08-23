@@ -1,0 +1,11 @@
+editText.setFilters(new InputFilter[]{
+        new InputFilter.AllCaps(),   // force uppercase
+        (source, start, end, dest, dstart, dend) -> {
+            for (int i = start; i < end; i++) {
+                if (Character.isWhitespace(source.charAt(i))) {
+                    return ""; // block spaces
+                }
+            }
+            return null; // keep original
+        }
+});
