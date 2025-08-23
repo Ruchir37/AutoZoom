@@ -1,9 +1,18 @@
 editText.setFilters(new InputFilter[]{
         new InputFilter.AllCaps(),   // force uppercase
+        new InputFilter.LengthFilter(20), // limit to 20 chars
         (source, start, end, dest, dstart, dend) -> {
             for (int i = start; i < end; i++) {
-                if (Character.isWhitespace(source.charAt(i))) {
-                    return ""; // block spaces
+                char c = source.charAt(i);
+
+                // block spaces
+                if (c == ' ') {
+                    return "";
+                }
+
+                // allow only A–Z and 0–9
+                if (!Character.isLetterOrDigit(c)) {
+                    return "";
                 }
             }
             return null; // keep original
