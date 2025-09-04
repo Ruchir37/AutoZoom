@@ -1,0 +1,58 @@
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.view.Gravity;
+import android.widget.FrameLayout;
+import android.widget.TextView;
+import androidx.appcompat.app.AppCompatActivity;
+import com.airbnb.lottie.LottieAnimationView;
+
+public class TimerActivity extends AppCompatActivity {
+
+    private static final long TOTAL_TIME = 30 * 60 * 1000; // 30 minutes
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        FrameLayout root = new FrameLayout(this);
+
+        LottieAnimationView lottieView = new LottieAnimationView(this);
+        lottieView.setAnimation("progress_timer.json"); // your chosen JSON
+        lottieView.setRepeatCount(0);
+        lottieView.setProgress(0f);
+        lottieView.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT
+        ));
+
+        TextView timerText = new TextView(this);
+        timerText.setTextSize(28f);
+        timerText.setTextColor(0xFF000000);
+        timerText.setText("30:00");
+        FrameLayout.LayoutParams textParams = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.WRAP_CONTENT,
+                FrameLayout.LayoutParams.WRAP_CONTENT
+        );
+        textParams.gravity = Gravity.CENTER;
+        timerText.setLayoutParams(textParams);
+
+        root.addView(lottieView);
+        root.addView(timerText);
+        setContentView(root);
+
+        new CountDownTimer(TOTAL_TIME, 1000) {
+            public void onTick(long millisUntilFinished) {
+                int min = (int)(millisUntilFinished / 1000) / 60;
+                int sec = (int)(millisUntilFinished / 1000) % 60;
+                timerText.setText(String.format("%02d:%02d", min, sec));
+
+                float progress = 1f - (float) millisUntilFinished / TOTAL_TIME;
+                lottieView.setProgress(progress);
+            }
+            public void onFinish() {
+                timerText.setText("00:00");
+                lottieView.setProgress(1f);
+            }
+        }.start();
+    }
+}
