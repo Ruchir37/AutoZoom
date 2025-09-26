@@ -1,0 +1,23 @@
+private List<String> getShuffledDigits() {
+    List<String> digits = new ArrayList<>();
+    for (int i = 0; i <= 9; i++) {
+        digits.add(String.valueOf(i));
+    }
+    Collections.shuffle(digits);
+    return digits;
+}
+
+
+private void shuffleKeypad(GridLayout gridLayout) {
+    gridLayout.removeAllViews();
+    List<String> shuffledDigits = getShuffledDigits();
+
+    for (String digit : shuffledDigits) {
+        Button btn = new Button(this);
+        btn.setText(digit);
+        btn.setOnClickListener(v -> {
+            // handle digit tap here
+        });
+        gridLayout.addView(btn);
+    }
+}
