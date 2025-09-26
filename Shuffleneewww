@@ -1,0 +1,22 @@
+private void shuffleKeypad() {
+    // Create list of digits 0-9
+    List<String> digits = new ArrayList<>();
+    for (int i = 0; i <= 9; i++) {
+        digits.add(String.valueOf(i));
+    }
+
+    // Shuffle the digits
+    Collections.shuffle(digits);
+
+    // Assign shuffled digits to your buttons
+    ((TextView) findViewById(R.id.btn0)).setText(digits.get(0));
+    ((TextView) findViewById(R.id.btn1)).setText(digits.get(1));
+    ((TextView) findViewById(R.id.btn2)).setText(digits.get(2));
+    ((TextView) findViewById(R.id.btn3)).setText(digits.get(3));
+    ((TextView) findViewById(R.id.btn4)).setText(digits.get(4));
+    ((TextView) findViewById(R.id.btn5)).setText(digits.get(5));
+    ((TextView) findViewById(R.id.btn6)).setText(digits.get(6));
+    ((TextView) findViewById(R.id.btn7)).setText(digits.get(7));
+    ((TextView) findViewById(R.id.btn8)).setText(digits.get(8));
+    ((TextView) findViewById(R.id.btn9)).setText(digits.get(9));
+}
