@@ -1,5 +1,25 @@
-if (Utils.calculateRemainingTime(delegateUserList.get(position).getCrDate()) > 0) {
-    ...
+private void startCountDown(long millisInFuture, ViewHolder holder) {
+    new CountDownTimer(millisInFuture, 1000) { // tick every second
+        public void onTick(long millisUntilFinished) {
+            long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
+            long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60;
+            long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
+
+            holder.timerText.setText(String.format(Locale.getDefault(),
+                    "%02d:%02d:%02d", hours, minutes, seconds));
+        }
+
+        public void onFinish() {
+            holder.timerText.setText("Expired");
+        }
+    }.start();
+}
+
+
+
+long remainingSeconds = Utils.calculateRemainingTime(delegateUserList.get(position).getCrDate());
+if (remainingSeconds > 0) {
+    startCountDown(remainingSeconds * 1000, holder);  // convert to millis
 }
 
 
@@ -11,7 +31,7 @@ public static long calculateRemainingTime(String scheduledDate) {
 
         long diffInMillis = scheduledDateObj.getTime() - currentDate.getTime();
 
-        // return seconds instead of minutes
+        // Return seconds (so countdown can handle small durations also)
         return TimeUnit.MILLISECONDS.toSeconds(diffInMillis);
 
     } catch (ParseException e) {
