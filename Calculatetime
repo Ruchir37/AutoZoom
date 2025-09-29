@@ -1,21 +1,51 @@
-public static long calculateRemainingTime(String scheduledDate) {
+
+public static long calculateRemainingTime(String crtDate) {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-    format.setTimeZone(TimeZone.getTimeZone("UTC")); // if server date is UTC
+    // ⚠️ adjust timezone if server sends UTC:
+    // format.setTimeZone(TimeZone.getTimeZone("UTC"));
 
     try {
-        Date scheduledDateObj = format.parse(scheduledDate);
+        Date startDate = format.parse(crtDate);
 
-        // Use system current time in UTC as well
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        Date currentDate = calendar.getTime();
+        // expiry = crtDate + 30 minutes
+        long expiryMillis = startDate.getTime() + TimeUnit.MINUTES.toMillis(30);
 
-        long diffInMillis = scheduledDateObj.getTime() - currentDate.getTime();
+        long currentMillis = System.currentTimeMillis();
+        long diffInMillis = expiryMillis - currentMillis;
 
-        // Return SECONDS, not minutes
+        // return remaining seconds
         return TimeUnit.MILLISECONDS.toSeconds(diffInMillis);
 
     } catch (ParseException e) {
         e.printStackTrace();
     }
     return 0;
+}
+
+
+
+long remainingSeconds = Utils.calculateRemainingTime(delegateUserList.get(position).getCrDate());
+
+if (remainingSeconds > 0) {
+    startCountDown(remainingSeconds * 1000, holder); // CountDownTimer expects millis
+} else {
+    holder.timerText.setText("Expired");
+}
+
+private void startCountDown(long millisInFuture, ViewHolder holder) {
+    new CountDownTimer(millisInFuture, 1000) {
+        public void onTick(long millisUntilFinished) {
+            long seconds = (millisUntilFinished / 1000) % 60;
+            long minutes = (millisUntilFinished / (1000 * 60)) % 60;
+            long hours   = (millisUntilFinished / (1000 * 60 * 60));
+
+            holder.timerText.setText(String.format(Locale.getDefault(),
+                    "%02d:%02d:%02d", hours, minutes, seconds));
+        }
+
+        public void onFinish() {
+            holder.timerText.setText("Expired");
+            // 🔔 Optional: hide/disable button here
+        }
+    }.start();
 }
