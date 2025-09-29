@@ -1,37 +1,17 @@
-private void startCountDown(long millisInFuture, ViewHolder holder) {
-    new CountDownTimer(millisInFuture, 1000) { // tick every second
-        public void onTick(long millisUntilFinished) {
-            long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60;
-            long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished) % 60;
-            long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
-
-            holder.timerText.setText(String.format(Locale.getDefault(),
-                    "%02d:%02d:%02d", hours, minutes, seconds));
-        }
-
-        public void onFinish() {
-            holder.timerText.setText("Expired");
-        }
-    }.start();
-}
-
-
-
-long remainingSeconds = Utils.calculateRemainingTime(delegateUserList.get(position).getCrDate());
-if (remainingSeconds > 0) {
-    startCountDown(remainingSeconds * 1000, holder);  // convert to millis
-}
-
-
 public static long calculateRemainingTime(String scheduledDate) {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+    format.setTimeZone(TimeZone.getTimeZone("UTC")); // if server date is UTC
+
     try {
         Date scheduledDateObj = format.parse(scheduledDate);
-        Date currentDate = Calendar.getInstance().getTime();
+
+        // Use system current time in UTC as well
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Date currentDate = calendar.getTime();
 
         long diffInMillis = scheduledDateObj.getTime() - currentDate.getTime();
 
-        // Return seconds (so countdown can handle small durations also)
+        // Return SECONDS, not minutes
         return TimeUnit.MILLISECONDS.toSeconds(diffInMillis);
 
     } catch (ParseException e) {
