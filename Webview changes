@@ -1,0 +1,12 @@
+webView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+    @Override
+    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        WebView webView = (WebView) v;
+
+        // Check if scroll reached bottom
+        if (scrollY + webView.getHeight() >= webView.getContentHeight() * webView.getScale()) {
+            // Perform your action here
+            Toast.makeText(getApplicationContext(), "Reached Bottom!", Toast.LENGTH_SHORT).show();
+        }
+    }
+});
