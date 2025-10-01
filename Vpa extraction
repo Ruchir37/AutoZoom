@@ -1,0 +1,10 @@
+String msg = "You have made a UPI transaction for Rs.1.00 and Credited to account linked to VPA 9930258623@icici(UPI Ref no 100284368541).";
+
+// Regex: captures any VPA format (word@word)
+Pattern pattern = Pattern.compile("\\b([A-Za-z0-9._-]+@[A-Za-z]+)\\b");
+Matcher matcher = pattern.matcher(msg);
+
+if (matcher.find()) {
+    String vpa = matcher.group(1);  // "9930258623@icici"
+    Log.d("VPA", vpa);
+}
