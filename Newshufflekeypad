@@ -1,0 +1,31 @@
+private void shuffleKeypad() {
+    // Digits 0–9
+    List<String> digits = new ArrayList<>();
+    for (int i = 0; i <= 9; i++) {
+        digits.add(String.valueOf(i));
+    }
+
+    // Shuffle
+    Collections.shuffle(digits);
+
+    // Collect your keypad buttons
+    TextView[] numberButtons = {
+            findViewById(R.id.btn0),
+            findViewById(R.id.btn1),
+            findViewById(R.id.btn2),
+            findViewById(R.id.btn3),
+            findViewById(R.id.btn4),
+            findViewById(R.id.btn5),
+            findViewById(R.id.btn6),
+            findViewById(R.id.btn7),
+            findViewById(R.id.btn8),
+            findViewById(R.id.btn9)
+    };
+
+    // Assign digits
+    for (int i = 0; i < numberButtons.length; i++) {
+        numberButtons[i].setText(digits.get(i));
+        numberButtons[i].setTag(digits.get(i)); // keep tag for reliable retrieval
+        numberButtons[i].invalidate();          // force redraw (important for OnePlus/Oppo)
+    }
+}
