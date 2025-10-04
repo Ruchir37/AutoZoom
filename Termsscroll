@@ -1,0 +1,21 @@
+sv_details.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+    @Override
+    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+        View child = sv_details.getChildAt(0);
+
+        if (child != null) {
+            int diff = child.getMeasuredHeight() - (sv_details.getHeight() + sv_details.getScrollY());
+
+            if (diff <= 0) {
+                // ✅ Bottom reached
+                Log.i("ScrollView", "Bottom reached");
+                btnProceed.setEnabled(true);
+                btnProceed.setBackgroundResource(R.drawable.button_background_revamp);
+            } else {
+                // ❌ Not at bottom
+                btnProceed.setEnabled(false);
+                btnProceed.setBackgroundResource(R.drawable.button_background_grey_revamp);
+            }
+        }
+    }
+});
