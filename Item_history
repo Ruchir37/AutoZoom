@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/small_space">
+
+    <androidx.cardview.widget.CardView
+        style="@style/cardViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/avg_margin">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Payment Type -->
+            <TextView
+                android:id="@+id/tv_payment_via_credit_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="@dimen/medium_space"
+                android:text="Credit Card" />
+
+            <!-- SHORT SUMMARY ROW -->
+            <LinearLayout
+                android:id="@+id/transactionShortLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/medium_space">
+
+                <!-- Indicator + Status -->
+                <LinearLayout
+                    android:id="@+id/indicatorLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginRight="@dimen/medium_space"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/indicatorImageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_pay_blue" />
+
+                    <TextView
+                        android:id="@+id/statusTextView"
+                        style="@style/blackSmall"
+                        android:text="success"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <!-- Beneficiary + Time -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/beneficiaryNameTextView"
+                        style="@style/blackSmall"
+                        android:text="Beneficiary" />
+
+                    <TextView
+                        android:id="@+id/timeTextView"
+                        style="@style/textStyleInActiveSmall"
+                        android:text="10:30 AM"
+                        android:layout_marginTop="@dimen/small_space"/>
+                </LinearLayout>
+
+                <!-- Amount + Type -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="right">
+
+                    <TextView
+                        android:id="@+id/amountTextView"
+                        style="@style/blackSmall"
+                        android:text="300.00" />
+
+                    <TextView
+                        android:id="@+id/transactionType"
+                        style="@style/blackSmall"
+                        android:text="Credit" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- DETAILS SECTION -->
+            <LinearLayout
+                android:id="@+id/detailsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/large_space"
+                android:paddingTop="@dimen/medium_space"
+                android:animateLayoutChanges="true">
+
+                <View
+                    android:id="@+id/dividerView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray" />
+
+                <!-- UNIVERSAL REUSABLE DETAIL ROW TEMPLATE -->
+                <!-- REF NO -->
+                <LinearLayout
+                    android:id="@+id/refNoRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/refNoTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/cust_ref" />
+
+                    <TextView
+                        android:id="@+id/refNoTextView"
+                        style="@style/blackSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <!-- SELF VPA -->
+                <LinearLayout
+                    android:id="@+id/selfVpaRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/selfVPATitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/credited_to" />
+
+                    <TextView
+                        android:id="@+id/selfVPATextView"
+                        style="@style/blackSmallMarque"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+                <!-- SELF ACCOUNT -->
+                <LinearLayout
+                    android:id="@+id/selfAccountRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/selfAccountTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/trans_ref" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/selfBankLogo"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginRight="@dimen/large_space"
+                            app:srcCompat="@drawable/ic_sbi" />
+
+                        <TextView
+                            android:id="@+id/selfAccountTextView"
+                            style="@style/blackSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- TARGET VPA -->
+                <LinearLayout
+                    android:id="@+id/targetVpaRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/targetVPATitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/trans_ref" />
+
+                    <TextView
+                        android:id="@+id/beneficiaryVPATextView"
+                        style="@style/blackSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+                <!-- TARGET PAYEE VPA -->
+                <LinearLayout
+                    android:id="@+id/payeeVpaRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/targetPayeeVpa"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Payee Vpa" />
+
+                    <TextView
+                        android:id="@+id/beneficiaryPayeeVPA"
+                        style="@style/blackSmallMarque"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:maxLines="1" />
+                </LinearLayout>
+
+                <!-- REMARKS -->
+                <LinearLayout
+                    android:id="@+id/remarksRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/remarksTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/remarks" />
+
+                    <TextView
+                        android:id="@+id/remarksTextView"
+                        style="@style/blackSmallMarque"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <!-- FAIL REASON -->
+                <LinearLayout
+                    android:id="@+id/failReasonRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/failReasonTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/reason" />
+
+                    <TextView
+                        android:id="@+id/failReasonTextView"
+                        style="@style/blackSmallMarque"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <!-- DISPUTE STATUS -->
+                <LinearLayout
+                    android:id="@+id/disputeStatusRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/disputeStatusTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/dispute_status" />
+
+                    <TextView
+                        android:id="@+id/disputeStatusTextView"
+                        style="@style/blackSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <!-- ADJ STATUS -->
+                <LinearLayout
+                    android:id="@+id/adjStatusRow"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/medium_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/adjFlagTitle"
+                        style="@style/textStyleInActiveSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/adj_status" />
+
+                    <TextView
+                        android:id="@+id/adjFlagTextView"
+                        style="@style/blackSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="right" />
+                </LinearLayout>
+
+                <!-- Invoice -->
+                <TextView
+                    android:id="@+id/inVoiceTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingVertical="@dimen/_5sdp"
+                    android:text="@string/view_invoice"
+                    android:visibility="gone"
+                    style="@style/blueSmall" />
+
+                <!-- Dispute / Repeat / Refresh -->
+                <LinearLayout
+                    android:id="@+id/disputeLinearLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/refreshStatusTextView"
+                        style="@style/blueSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/medium_space"
+                        android:background="@drawable/rectangle"
+                        android:layout_margin="@dimen/large_space"
+                        android:text="@string/refresh_status"
+                        android:visibility="gone"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/raiseDisputeTextView"
+                        style="@style/blueSmall"
+                        android:padding="@dimen/medium_space"
+                        android:background="@drawable/rectangle"
+                        android:layout_margin="@dimen/large_space"
+                        android:text="@string/raise_complaint"
+                        android:visibility="gone"
+                        android:textAllCaps="true" />
+
+                    <TextView
+                        android:id="@+id/repeatTransactionTextView"
+                        style="@style/blueSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:padding="@dimen/medium_space"
+                        android:background="@drawable/rectangle"
+                        android:layout_margin="@dimen/large_space"
+                        android:text="@string/repeat"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:textAllCaps="true" />
+
+                </LinearLayout>
+
+                <!-- Unauthorized -->
+                <TextView
+                    android:id="@+id/unauthorizedTxnTextView"
+                    style="@style/blueSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:padding="@dimen/medium_space"
+                    android:background="@drawable/rectangle"
+                    android:text="@string/unauthorized_transaction"
+                    android:visibility="gone"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <!-- Arrow -->
+            <LinearLayout
+                android:id="@+id/detailHandleLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/actionIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/ic_down" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:id="@+id/dividerView"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:visibility="gone"
+        android:layout
