@@ -1,0 +1,16 @@
+SubscriptionManager subManager =
+        (SubscriptionManager) context.getSystemService(Context.TELEPHONY_SUBSCRIPTION_SERVICE);
+
+if (ActivityCompat.checkSelfPermission(
+        context, Manifest.permission.READ_PHONE_STATE)
+        != PackageManager.PERMISSION_GRANTED) {
+    return;
+}
+
+List<SubscriptionInfo> activeSubs = subManager.getActiveSubscriptionInfoList();
+
+if (activeSubs != null && !activeSubs.isEmpty()) {
+    // ✅ SIM is present and active
+} else {
+    // ❌ No active SIM
+}
