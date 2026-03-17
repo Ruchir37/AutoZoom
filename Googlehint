@@ -1,78 +1,10 @@
-implementation 'com.google.android.gms:play-services-identity:18.0.1'
+String phoneNumber = signInClient.getPhoneNumberFromIntent(data);
 
+// Remove spaces just in case
+phoneNumber = phoneNumber.replaceAll("\\s", "");
 
-
-
-package com.example.phonenumberhint;
-
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
-import android.widget.EditText;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-
-public class MainActivity extends AppCompatActivity {
-
-    private static final int PHONE_HINT_REQUEST = 1001;
-    private EditText editTextPhone;
-    private SignInClient signInClient;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        editTextPhone = findViewById(R.id.editTextPhone);
-
-        // New API client
-        signInClient = Identity.getSignInClient(this);
-
-        editTextPhone.setOnClickListener(v -> getPhoneNumberHint());
-    }
-
-    private void getPhoneNumberHint() {
-
-        GetPhoneNumberHintIntentRequest request =
-                GetPhoneNumberHintIntentRequest.builder().build();
-
-        signInClient.getPhoneNumberHintIntent(request)
-                .addOnSuccessListener(result -> {
-                    try {
-                        startIntentSenderForResult(
-                                result.getIntentSender(),
-                                PHONE_HINT_REQUEST,
-                                null,
-                                0,
-                                0,
-                                0
-                        );
-                    } catch (IntentSender.SendIntentException e) {
-                        e.printStackTrace();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    e.printStackTrace();
-                });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PHONE_HINT_REQUEST && resultCode == RESULT_OK) {
-            try {
-                String phoneNumber = signInClient.getPhoneNumberFromIntent(data);
-                editTextPhone.setText(phoneNumber);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
+if (phoneNumber.startsWith("+91")) {
+    phoneNumber = phoneNumber.replace("+91", "");
 }
+
+editTextPhone.setText(phoneNumber);
