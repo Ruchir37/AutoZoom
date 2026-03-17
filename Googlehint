@@ -1,26 +1,28 @@
+implementation 'com.google.android.gms:play-services-identity:18.0.1'
+
+
+
+
 package com.example.phonenumberhint;
 
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.auth.api.credentials.Credential;
-import com.google.android.gms.auth.api.credentials.Credentials;
-import com.google.android.gms.auth.api.credentials.CredentialsClient;
-import com.google.android.gms.auth.api.credentials.HintRequest;
+import com.google.android.gms.auth.api.identity.GetPhoneNumberHintIntentRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PHONE_HINT_REQUEST = 1001;
     private EditText editTextPhone;
-    private CredentialsClient credentialsClient;
+    private SignInClient signInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,45 +31,35 @@ public class MainActivity extends AppCompatActivity {
 
         editTextPhone = findViewById(R.id.editTextPhone);
 
-        // Initialize Credentials Client
-        credentialsClient = Credentials.getClient(this);
+        // New API client
+        signInClient = Identity.getSignInClient(this);
 
-        // Open phone picker when user clicks the field
-        editTextPhone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPhoneNumberHint();
-            }
-        });
-
-        // Optional: also trigger when focused
-        editTextPhone.setOnFocusChangeListener((v, hasFocus) -> {
-            if (hasFocus) {
-                getPhoneNumberHint();
-            }
-        });
+        editTextPhone.setOnClickListener(v -> getPhoneNumberHint());
     }
 
     private void getPhoneNumberHint() {
 
-        HintRequest hintRequest = new HintRequest.Builder()
-                .setPhoneNumberIdentifierSupported(true)
-                .build();
+        GetPhoneNumberHintIntentRequest request =
+                GetPhoneNumberHintIntentRequest.builder().build();
 
-        PendingIntent intent = credentialsClient.getHintPickerIntent(hintRequest);
-
-        try {
-            startIntentSenderForResult(
-                    intent.getIntentSender(),
-                    PHONE_HINT_REQUEST,
-                    null,
-                    0,
-                    0,
-                    0
-            );
-        } catch (IntentSender.SendIntentException e) {
-            e.printStackTrace();
-        }
+        signInClient.getPhoneNumberHintIntent(request)
+                .addOnSuccessListener(result -> {
+                    try {
+                        startIntentSenderForResult(
+                                result.getIntentSender(),
+                                PHONE_HINT_REQUEST,
+                                null,
+                                0,
+                                0,
+                                0
+                        );
+                    } catch (IntentSender.SendIntentException e) {
+                        e.printStackTrace();
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                });
     }
 
     @Override
@@ -75,17 +67,11 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PHONE_HINT_REQUEST && resultCode == RESULT_OK) {
-            if (data != null) {
-                Credential credential = data.getParcelableExtra(Credential.EXTRA_KEY);
-
-                if (credential != null) {
-                    String phoneNumber = credential.getId();
-
-                    // Set number in EditText
-                    editTextPhone.setText(phoneNumber);
-
-                    Log.d("PHONE_NUMBER", phoneNumber);
-                }
+            try {
+                String phoneNumber = signInClient.getPhoneNumberFromIntent(data);
+                editTextPhone.setText(phoneNumber);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
