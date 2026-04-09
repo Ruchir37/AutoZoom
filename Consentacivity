@@ -1,0 +1,53 @@
+public class ConsentActivity extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    OptionalConsentRecyclerAdapter adapter;
+
+    ArrayList<DpConsent> consentList = new ArrayList<>();
+
+    ImageView btnSubmit;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_consent);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        btnSubmit = findViewById(R.id.btnSubmit);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Suppose consentList comes from API
+        adapter = new OptionalConsentRecyclerAdapter(consentList);
+
+        recyclerView.setAdapter(adapter);
+
+        btnSubmit.setOnClickListener(v -> {
+
+            ArrayList<String> selectedValues = adapter.getSelectedValues();
+
+            sendConsentToAPI(selectedValues);
+
+        });
+    }
+
+    private void sendConsentToAPI(ArrayList<String> selectedValues) {
+
+        for (String value : selectedValues) {
+            Log.d("CONSENT_SELECTED", value);
+        }
+
+        // Example API body
+        /*
+        {
+           "consents":[
+               "Demat and securities",
+               "Mutual Fund / Asset Management",
+               "Life Insurance",
+               "Analytics"
+           ]
+        }
+        */
+
+    }
+}
