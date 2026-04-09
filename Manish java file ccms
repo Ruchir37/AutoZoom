@@ -1,0 +1,26 @@
+import java.util.List;
+
+public class ConsentSection {
+
+    private String title;
+    private String description;
+    private List<String> options;
+
+    public ConsentSection(String title, String description, List<String> options) {
+        this.title = title;
+        this.description = description;
+        this.options = options;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<String> getOptions() {
+        return options;
+    }
+}
