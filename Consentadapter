@@ -1,3 +1,5 @@
+package com.sbi.upi.customerMode.modules.ccms;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,62 +10,128 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import com.sbi.upi.R;
+import com.sbi.upi.customerMode.modules.ccms.model.BankProduct;
+import com.sbi.upi.customerMode.modules.ccms.model.DpConsent;
 
-public class ConsentAdapter extends RecyclerView.Adapter<ConsentAdapter.ViewHolder> {
+import java.util.ArrayList;
 
-    private Context context;
-    private List<ConsentSection> list;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    public ConsentAdapter(Context context, List<ConsentSection> list) {
-        this.context = context;
-        this.list = list;
+public class OptionalConsentRecyclerAdapter extends RecyclerView.Adapter<OptionalConsentRecyclerAdapter.ViewHolder> {
+
+    Context context;
+    public ArrayList<DpConsent> body;
+
+    public OptionalConsentRecyclerAdapter(ArrayList<DpConsent> body) {
+        this.body = body;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View view = LayoutInflater.from(context)
-                .inflate(R.layout.item_consent_section, parent, false);
-
-        return new ViewHolder(view);
+        context = parent.getContext();
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ccms, parent, false);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        ConsentSection section = list.get(position);
+        DpConsent consent = body.get(position);
 
-        holder.tvTitle.setText(section.getTitle());
-        holder.tvDescription.setText(section.getDescription());
+        viewHolder.tv_title.setText(consent.purposes.get(0).title);
+        viewHolder.tv_content.setText(consent.purposes.get(0).description);
 
-        holder.checkboxContainer.removeAllViews();
+        ArrayList<BankProduct> bankProducts = consent.purposes.get(0).bankProducts;
 
-        for (String option : section.getOptions()) {
+        viewHolder.checkboxContainer.removeAllViews();
 
-            CheckBox checkBox = new CheckBox(context);
-            checkBox.setText(option);
+        // If there are bank products → create dynamic checkboxes
+        if (bankProducts != null && bankProducts.size() > 0) {
 
-            holder.checkboxContainer.addView(checkBox);
+            viewHolder.cb_status.setVisibility(View.GONE);
+
+            for (int i = 0; i < bankProducts.size(); i++) {
+
+                BankProduct product = bankProducts.get(i);
+
+                CheckBox checkBox = new CheckBox(context);
+                checkBox.setText(product.label);
+                checkBox.setChecked(product.isSelected);
+
+                int index = i;
+
+                checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                    bankProducts.get(index).isSelected = isChecked;
+                });
+
+                viewHolder.checkboxContainer.addView(checkBox);
+            }
+
+        } else {
+
+            // Single checkbox like Analytics / Email
+            viewHolder.cb_status.setVisibility(View.VISIBLE);
+            viewHolder.cb_status.setChecked(consent.isSelected);
+
+            viewHolder.cb_status.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                consent.isSelected = isChecked;
+            });
         }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return body.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tvTitle, tvDescription;
+        @BindView(R.id.tv_title)
+        TextView tv_title;
+
+        @BindView(R.id.tv_content)
+        TextView tv_content;
+
+        @BindView(R.id.checkboxContainer)
         LinearLayout checkboxContainer;
+
+        @BindView(R.id.cb_status)
+        CheckBox cb_status;
 
         public ViewHolder(View itemView) {
             super(itemView);
-
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDescription = itemView.findViewById(R.id.tvDescription);
-            checkboxContainer = itemView.findViewById(R.id.checkboxContainer);
+            ButterKnife.bind(this, itemView);
         }
+    }
+
+    // Method to collect selected values
+    public ArrayList<String> getSelectedValues() {
+
+        ArrayList<String> selectedList = new ArrayList<>();
+
+        for (DpConsent consent : body) {
+
+            ArrayList<BankProduct> products = consent.purposes.get(0).bankProducts;
+
+            if (products != null && products.size() > 0) {
+
+                for (BankProduct product : products) {
+
+                    if (product.isSelected) {
+                        selectedList.add(product.label);
+                    }
+                }
+
+            } else {
+
+                if (consent.isSelected) {
+                    selectedList.add(consent.purposes.get(0).title);
+                }
+            }
+        }
+
+        return selectedList;
     }
 }
