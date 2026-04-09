@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Analytics",
+    "description": "Understand customer needs better by carrying out data analytics that help us design products.",
+    "options": [
+      "Life Insurance",
+      "General Insurance",
+      "Payment & Credit Cards",
+      "Mutual Fund / Asset Management",
+      "Demat and securities"
+    ]
+  },
+  {
+    "title": "Marketing",
+    "description": "Share updates and offers by informing you about bank products and promotions.",
+    "options": [
+      "Email Offers",
+      "SMS Offers",
+      "App Notifications"
+    ]
+  }
+]
