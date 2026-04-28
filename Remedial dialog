@@ -1,0 +1,201 @@
+package com.example.integrity;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.Settings;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.play.core.integrity.IntegrityManager;
+import com.google.android.play.core.integrity.IntegrityManagerFactory;
+import com.google.android.play.core.integrity.IntegrityTokenRequest;
+import com.google.android.play.core.integrity.IntegrityTokenResponse;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class MainActivity extends AppCompatActivity {
+
+    private IntegrityManager integrityManager;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        integrityManager = IntegrityManagerFactory.create(this);
+
+        requestIntegrityToken();
+    }
+
+    // 🔁 Step 1: Request token
+    private void requestIntegrityToken() {
+
+        IntegrityTokenRequest request = IntegrityTokenRequest.builder()
+                .setNonce("random_nonce_string") // generate securely in prod
+                .build();
+
+        integrityManager.requestIntegrityToken(request)
+                .addOnSuccessListener(new OnSuccessListener<IntegrityTokenResponse>() {
+                    @Override
+                    public void onSuccess(IntegrityTokenResponse response) {
+                        String token = response.token();
+
+                        // TODO: Send token to your backend for verification
+                        // For demo, we simulate parsing locally
+                        parseIntegrityResponse(token);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        e.printStackTrace();
+                    }
+                });
+    }
+
+    // 🧠 Step 2: Parse response (simulate backend decode)
+    private void parseIntegrityResponse(String token) {
+
+        try {
+            // ⚠️ In real app: decode JWT on backend
+            JSONObject fakeResponse = new JSONObject(token);
+
+            JSONObject deviceIntegrity = fakeResponse.optJSONObject("deviceIntegrity");
+            JSONArray verdicts = deviceIntegrity.optJSONArray("deviceRecognitionVerdict");
+
+            JSONObject riskDetails = fakeResponse.optJSONObject("riskDetails");
+
+            boolean isBasicIntegrity = false;
+            boolean isKnownRisk = false;
+
+            if (verdicts != null) {
+                for (int i = 0; i < verdicts.length(); i++) {
+                    if ("MEETS_BASIC_INTEGRITY".equals(verdicts.getString(i))) {
+                        isBasicIntegrity = true;
+                    }
+                }
+            }
+
+            if (riskDetails != null) {
+                String riskVerdict = riskDetails.optString("riskVerdict");
+                if ("KNOWN_ACCESS_RISK".equals(riskVerdict)) {
+                    isKnownRisk = true;
+                }
+            }
+
+            // 🚨 Step 3: Decision
+            if (!isBasicIntegrity && isKnownRisk) {
+                showKnownAccessRiskDialog(this);
+            } else {
+                proceedNormally();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // ✅ Normal Flow
+    private void proceedNormally() {
+        // Continue app
+    }
+
+    // 🚨 Step 4: Remedial Dialog
+    private void showKnownAccessRiskDialog(Context context) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Security Risk Detected");
+
+        builder.setMessage(
+                "We detected apps or settings that may compromise your security.\n\n" +
+                "Possible causes:\n" +
+                "• Screen overlay apps\n" +
+                "• Accessibility services misuse\n" +
+                "• Apps capturing your screen\n\n" +
+                "Please disable these to continue safely."
+        );
+
+        builder.setCancelable(false);
+
+        builder.setPositiveButton("Fix Now", (dialog, which) -> {
+            openFixOptionsDialog(context);
+        });
+
+        builder.setNegativeButton("Retry", (dialog, which) -> {
+            dialog.dismiss();
+            requestIntegrityToken();
+        });
+
+        builder.setNeutralButton("Exit", (dialog, which) -> {
+            ((Activity) context).finish();
+        });
+
+        builder.show();
+    }
+
+    // ⚙️ Step 5: Show options to fix
+    private void openFixOptionsDialog(Context context) {
+
+        String[] options = {
+                "Accessibility Settings",
+                "Disable Overlay Apps",
+                "Security Settings"
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Fix Security Settings");
+
+        builder.setItems(options, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    openAccessibilitySettings(context);
+                    break;
+                case 1:
+                    openOverlaySettings(context);
+                    break;
+                case 2:
+                    openSecuritySettings(context);
+                    break;
+            }
+        });
+
+        builder.show();
+    }
+
+    // 🔧 Step 6: Settings Intents
+
+    private void openAccessibilitySettings(Context context) {
+        try {
+            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openOverlaySettings(Context context) {
+        try {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + context.getPackageName()));
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openSecuritySettings(Context context) {
+        try {
+            Intent intent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
