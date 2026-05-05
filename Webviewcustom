@@ -1,0 +1,64 @@
+public class ObservableWebView extends WebView {
+
+    public interface OnScrollChangedCallback {
+        void onScroll(int scrollY, int contentHeight, int webViewHeight);
+    }
+
+    private OnScrollChangedCallback callback;
+
+    public ObservableWebView(Context context) {
+        super(context);
+    }
+
+    public ObservableWebView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public void setOnScrollChangedCallback(OnScrollChangedCallback callback) {
+        this.callback = callback;
+    }
+
+    @Override
+    protected void onScrollChanged(int l, int t, int oldl, int oldt) {
+        super.onScrollChanged(l, t, oldl, oldt);
+
+        if (callback != null) {
+            callback.onScroll(
+                    t,
+                    (int) Math.floor(getContentHeight() * getScale()),
+                    getHeight()
+            );
+        }
+    }
+}
+
+<com.yourpackage.ObservableWebView
+    android:id="@+id/webView"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"/>
+
+<Button
+    android:id="@+id/btnAgree"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Agree"
+    android:enabled="false"/>
+
+
+
+ObservableWebView webView = findViewById(R.id.webView);
+Button btnAgree = findViewById(R.id.btnAgree);
+
+btnAgree.setEnabled(false); // initially disabled
+
+webView.getSettings().setJavaScriptEnabled(true);
+webView.loadUrl("file:///android_asset/terms.html");
+
+webView.setOnScrollChangedCallback((scrollY, contentHeight, webViewHeight) -> {
+
+    if (scrollY + webViewHeight >= contentHeight - 10) {
+        // Reached bottom
+        btnAgree.setEnabled(true);
+    }
+});
