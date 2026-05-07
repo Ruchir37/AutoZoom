@@ -1,0 +1,11 @@
+main activity verdicts
+
+if (environmentVerdictDetected) {
+
+    Intent intent =
+            new Intent(this, EnvironmentRiskActivity.class);
+
+    startActivity(intent);
+
+    finish();
+}
