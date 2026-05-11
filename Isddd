@@ -1,0 +1,1 @@
+JavaScript is enabled in WebView to support required dynamic application functionality and secure web-based flows. The WebView loads only trusted HTTPS content from controlled domains, with additional security hardening and URL restrictions implemented to mitigate associated risks.
