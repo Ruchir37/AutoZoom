@@ -1,0 +1,40 @@
+public boolean verifyInstallerId(Context context) {
+
+    if (BuildConfig.FLAVOR.equals("prod")
+            && BuildConfig.BUILD_TYPE.equals(NativeInteractor.TYPE_ZERO)) {
+
+        List<String> validInstallers = new ArrayList<>(
+                Arrays.asList(
+                        "com.android.vending",
+                        "com.google.android.feedback"
+                )
+        );
+
+        String installer = null;
+
+        try {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+
+                InstallSourceInfo installSourceInfo =
+                        context.getPackageManager()
+                                .getInstallSourceInfo(context.getPackageName());
+
+                installer = installSourceInfo.getInstallingPackageName();
+
+            } else {
+
+                installer = context.getPackageManager()
+                        .getInstallerPackageName(context.getPackageName());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return installer != null && validInstallers.contains(installer);
+
+    } else {
+        return true;
+    }
+}
