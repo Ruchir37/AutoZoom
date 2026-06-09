@@ -1,34 +1,79 @@
-viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+public class VPAFragment extends Fragment {
+
+    private VPAPresenter presenter;
+
+    private boolean isLoaded = false;
+
+    public static VPAFragment getInstance() {
+        return new VPAFragment();
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(
+                R.layout.fragment_vpa,
+                container,
+                false
+        );
+
+        presenter = new VPAPresenter(this);
+
+        setUpUI();
+        setListeners();
+
+        // IMPORTANT
+        if (getUserVisibleHint()) {
+            loadData();
+        }
+
+        return view;
+    }
 
     @Override
-    public void onPageSelected(int position) {
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
 
-        switch(position) {
-
-            case 0:
-                if (adapter.vpaFragment != null)
-                    adapter.vpaFragment.loadData();
-                break;
-
-            case 1:
-                if (adapter.ifscFragment != null)
-                    adapter.ifscFragment.loadData();
-                break;
-
-            case 2:
-                if (adapter.qrFragment != null)
-                    adapter.qrFragment.loadData();
-                break;
+        // Fragment already created
+        if (isVisibleToUser && presenter != null) {
+            loadData();
         }
     }
 
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    public void loadData() {
 
+        if (isLoaded)
+            return;
+
+        isLoaded = true;
+
+        LogUtil.info(TAG, "loadData called");
+
+        presenter.onCreate();
+
+        presenter.setTransactionType(
+                getActivity().getIntent().getExtras()
+                        .getInt(AppConstants.TRANSACT_TYPE)
+        );
+
+        presenter.setCoreData(
+                (CoreData) getActivity()
+                        .getIntent()
+                        .getExtras()
+                        .getParcelable(AppConstants.CORE_DATA),
+
+                getActivity()
+                        .getIntent()
+                        .getExtras()
+                        .getInt(AppConstants.SELECTED_VPA_INDEX),
+
+                getActivity()
+                        .getIntent()
+                        .getExtras()
+                        .getInt(AppConstants.SELECTED_ACCOUNT_INDEX)
+        );
     }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-
-    }
-});
+}
