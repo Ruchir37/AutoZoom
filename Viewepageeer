@@ -1,23 +1,34 @@
-viewPager.registerOnPageChangeCallback(
-    new ViewPager2.OnPageChangeCallback() {
+viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
-        @Override
-        public void onPageSelected(int position) {
-            super.onPageSelected(position);
+    @Override
+    public void onPageSelected(int position) {
 
-            switch(position) {
+        switch(position) {
 
-                case 0:
-                    adapter.fragmentList.get(0).loadData();
-                    break;
+            case 0:
+                if (adapter.vpaFragment != null)
+                    adapter.vpaFragment.loadData();
+                break;
 
-                case 1:
-                    adapter.fragmentList.get(1).loadData();
-                    break;
+            case 1:
+                if (adapter.ifscFragment != null)
+                    adapter.ifscFragment.loadData();
+                break;
 
-                case 2:
-                    adapter.fragmentList.get(2).loadData();
-                    break;
-            }
+            case 2:
+                if (adapter.qrFragment != null)
+                    adapter.qrFragment.loadData();
+                break;
         }
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
 });
