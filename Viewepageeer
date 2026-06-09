@@ -1,0 +1,23 @@
+viewPager.registerOnPageChangeCallback(
+    new ViewPager2.OnPageChangeCallback() {
+
+        @Override
+        public void onPageSelected(int position) {
+            super.onPageSelected(position);
+
+            switch(position) {
+
+                case 0:
+                    adapter.fragmentList.get(0).loadData();
+                    break;
+
+                case 1:
+                    adapter.fragmentList.get(1).loadData();
+                    break;
+
+                case 2:
+                    adapter.fragmentList.get(2).loadData();
+                    break;
+            }
+        }
+});
