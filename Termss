@@ -1,0 +1,13 @@
+val inputStream = resources.openRawResource(R.raw.terms)
+
+val html = inputStream.bufferedReader().use {
+    it.readText()
+}
+
+webView.loadDataWithBaseURL(
+    null,
+    html,
+    "text/html",
+    "UTF-8",
+    null
+)
