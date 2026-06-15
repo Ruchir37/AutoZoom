@@ -1,0 +1,8 @@
+private String getStringForLocale(Context context, int resId, String languageCode) {
+    Locale locale = new Locale(languageCode);
+    Configuration config = new Configuration(context.getResources().getConfiguration());
+    config.setLocale(locale);
+
+    Context localizedContext = context.createConfigurationContext(config);
+    return localizedContext.getResources().getString(resId);
+}
