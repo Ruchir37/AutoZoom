@@ -1,0 +1,14 @@
+View root = findViewById(android.R.id.content);
+
+ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
+    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+
+    view.setPadding(
+            systemBars.left,
+            systemBars.top,
+            systemBars.right,
+            systemBars.bottom
+    );
+
+    return insets;
+});
