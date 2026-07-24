@@ -1,14 +1,27 @@
-View root = findViewById(android.R.id.content);
+getOnBackPressedDispatcher().addCallback(this,
+        new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                performBackPress();
+            }
+        });
 
-ViewCompat.setOnApplyWindowInsetsListener(root, (view, insets) -> {
-    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
 
-    view.setPadding(
-            systemBars.left,
-            systemBars.top,
-            systemBars.right,
-            systemBars.bottom
-    );
 
-    return insets;
-});
+protected void performBackPress() {
+
+    closeKeyBoard();
+
+    if (!hasConnectivity() ||
+            sessionExpiredLayout.getVisibility() == View.VISIBLE) {
+        killApp();
+    }
+
+    finish();
+
+    if (Build.VERSION.SDK_INT < 34) {
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+}
+
+
