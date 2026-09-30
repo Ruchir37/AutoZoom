@@ -1,0 +1,6 @@
+JRPropertiesUtil.getInstance(
+        DefaultJasperReportsContext.getInstance()
+).setProperty(
+        QueryExecuterFactory.QUERY_EXECUTER_FACTORY_PREFIX + "plsql",
+        "some.class.Name"
+);
