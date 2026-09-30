@@ -1,16 +1,22 @@
-package com.vTransact.adminportal;
+package com.vTransact.adminportal.config;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Import;
+import javax.sql.DataSource;
 
-import com.vTransact.adminportal.config.DataSourceConfig;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-@SpringBootApplication
-@Import(DataSourceConfig.class)
-public class VTransactAdminPortalApplication {
+@Configuration
+public class DataSourceConfig {
 
-    public static void main(String[] args) {
-        SpringApplication.run(VTransactAdminPortalApplication.class, args);
+    @Bean(name = "dataSource1")
+    public DataSource dataSource1() {
+
+        return DataSourceBuilder.create()
+                .driverClassName("oracle.jdbc.OracleDriver")
+                .url("jdbc:oracle:thin:@//10.189.201.222:1531/upiuatn1_26")
+                .username("UPIUAT")
+                .password("UPIUAT")
+                .build();
     }
 }
