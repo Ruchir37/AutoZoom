@@ -1,0 +1,7 @@
+@SpringBootApplication
+public class VTransactAdminPortalApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(VTransactAdminPortalApplication.class, args);
+    }
+}
