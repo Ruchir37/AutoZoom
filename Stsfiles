@@ -9,9 +9,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class DataSourceConfig {
 
+    @Bean(name = "dataSource")
+    public DataSource dataSource() {
+        return DataSourceBuilder.create()
+                .driverClassName("oracle.jdbc.OracleDriver")
+                .url("jdbc:oracle:thin:@//10.189.201.222:1531/upiuatn1_26")
+                .username("UPIUAT")
+                .password("UPIUAT")
+                .build();
+    }
+
     @Bean(name = "dataSource1")
     public DataSource dataSource1() {
-
         return DataSourceBuilder.create()
                 .driverClassName("oracle.jdbc.OracleDriver")
                 .url("jdbc:oracle:thin:@//10.189.201.222:1531/upiuatn1_26")
