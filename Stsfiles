@@ -1,6 +1,4 @@
-JRPropertiesUtil.getInstance(
-        DefaultJasperReportsContext.getInstance()
-).setProperty(
-        QueryExecuterFactory.QUERY_EXECUTER_FACTORY_PREFIX + "plsql",
-        "some.class.Name"
-);
+<dependency>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc17</artifactId>
+</dependency>
