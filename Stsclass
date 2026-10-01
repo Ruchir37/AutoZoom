@@ -1,38 +1,27 @@
-@Configuration
-public class DataSourceConfig {
+package com.vTransact.adminportal;
 
-    @Bean(name = "dataSource")
-    public DataSource dataSource() {
-        return DataSourceBuilder.create()
-                .driverClassName("oracle.jdbc.OracleDriver")
-                .url("jdbc:oracle:thin:@//10.189.201.222:1531/upi...") 
-                .username("UPIUAT")
-                .password("UPIUAT")
-                .build();
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.Import;
+
+import com.vTransact.adminportal.config.DataSourceConfig;
+
+@SpringBootApplication
+@Import(DataSourceConfig.class)
+public class VTransactAdminPortalApplication
+        extends SpringBootServletInitializer {
+
+    @Override
+    protected SpringApplicationBuilder configure(
+            SpringApplicationBuilder application) {
+
+        return application.sources(VTransactAdminPortalApplication.class);
     }
 
-    @Bean(name = "dataSource1")
-    public DataSource dataSource1() {
-        return dataSource();
-    }
-
-    @Bean(name = "dataSource3")
-    public DataSource dataSource3() {
-        return dataSource();
-    }
-
-    @Bean(name = "pspDataSourceRecon")
-    public DataSource pspDataSourceRecon() {
-        return dataSource();
-    }
-
-    @Bean(name = "dataSourceRecon")
-    public DataSource dataSourceRecon() {
-        return dataSource();
-    }
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public static void main(String[] args) {
+        SpringApplication.run(
+                VTransactAdminPortalApplication.class, args);
     }
 }
