@@ -1,23 +1,34 @@
-package com.vTransact.adminportal.config;
-
-import javax.sql.DataSource;
-
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-
 @Configuration
 public class DataSourceConfig {
 
-    @Bean
+    @Bean(name = "dataSource")
     public DataSource dataSource() {
         return DataSourceBuilder.create()
                 .driverClassName("oracle.jdbc.OracleDriver")
-                .url("jdbc:oracle:thin:@10.189.201.222:1531/upi...")
+                .url("jdbc:oracle:thin:@//10.189.201.222:1531/upi...") 
                 .username("UPIUAT")
                 .password("UPIUAT")
                 .build();
+    }
+
+    @Bean(name = "dataSource1")
+    public DataSource dataSource1() {
+        return dataSource();
+    }
+
+    @Bean(name = "dataSource3")
+    public DataSource dataSource3() {
+        return dataSource();
+    }
+
+    @Bean(name = "pspDataSourceRecon")
+    public DataSource pspDataSourceRecon() {
+        return dataSource();
+    }
+
+    @Bean(name = "dataSourceRecon")
+    public DataSource dataSourceRecon() {
+        return dataSource();
     }
 
     @Bean
