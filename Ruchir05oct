@@ -1,0 +1,14 @@
+@RequestMapping(
+    value = {"/loginUPIInterface"},
+    method = {RequestMethod.GET, RequestMethod.POST}
+)
+public String loginUPIInterface(
+        @RequestBody(required = false) String requestbody,
+        @RequestParam(value = "pageValJson", defaultValue = "na") String searchCriteriaDTO,
+        HttpServletRequest request,
+        HttpSession session,
+        HttpServletResponse response,
+        String json,
+        Model model,
+        SearchCriteriaDTO searchCriteriaDTOObj
+) throws Exception {
