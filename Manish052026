@@ -1,43 +1,33 @@
-public static Properties loadProperties() {
-
-    Properties prop = null;
-    InputStream inputStream = null;
-
-    if (ENVIRONMENT == null || ENVIRONMENT.trim().equals("")) {
-        ENVIRONMENT = "local";
-    }
-
-    String propName = "env_" + ENVIRONMENT + ".properties";
-
+static {
     try {
         prop = new Properties();
 
-        inputStream =
-            PropertiesUtil.class
-                .getClassLoader()
-                .getResourceAsStream(propName);
+        try (InputStream inputStream =
+                     SecurityUtil.class.getClassLoader()
+                         .getResourceAsStream("config.properties")) {
 
-        if (inputStream == null) {
-            throw new FileNotFoundException(
-                "Property file not found in classpath: " + propName
-            );
+            if (inputStream == null) {
+                throw new IllegalStateException(
+                    "config.properties not found in classpath");
+            }
+
+            prop.load(inputStream);
         }
 
-        prop.load(inputStream);
+        try (InputStream inputStream1 =
+                     SecurityUtil.class.getClassLoader()
+                         .getResourceAsStream("key.properties")) {
+
+            if (inputStream1 == null) {
+                throw new IllegalStateException(
+                    "key.properties not found in classpath");
+            }
+
+            prop.load(inputStream1);
+        }
 
     } catch (Exception ex) {
         ex.printStackTrace();
-        prop = null;
-
-    } finally {
-        try {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        throw new ExceptionInInitializerError(ex);
     }
-
-    return prop;
 }
