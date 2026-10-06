@@ -1,33 +1,26 @@
+static Properties prop;
+
 static {
     try {
         prop = new Properties();
 
-        try (InputStream inputStream =
-                     SecurityUtil.class.getClassLoader()
-                         .getResourceAsStream("config.properties")) {
+        InputStream inputStream =
+                VTransactUtil.class
+                        .getClassLoader()
+                        .getResourceAsStream("EmailContent.properties");
 
-            if (inputStream == null) {
-                throw new IllegalStateException(
-                    "config.properties not found in classpath");
-            }
-
-            prop.load(inputStream);
+        if (inputStream == null) {
+            throw new FileNotFoundException(
+                    "EmailContent.properties not found in classpath"
+            );
         }
 
-        try (InputStream inputStream1 =
-                     SecurityUtil.class.getClassLoader()
-                         .getResourceAsStream("key.properties")) {
-
-            if (inputStream1 == null) {
-                throw new IllegalStateException(
-                    "key.properties not found in classpath");
-            }
-
-            prop.load(inputStream1);
-        }
+        prop.load(inputStream);
 
     } catch (Exception ex) {
-        ex.printStackTrace();
-        throw new ExceptionInInitializerError(ex);
+        Log.doLog(LOGC.LTE, "VTransactUtil",
+                "VTransactUtil Static Block",
+                "Error: Failed to read property file. Exception Stack : "
+                        + getStackTrace(ex), "", "", "");
     }
 }
