@@ -1,9 +1,8 @@
-<dependency>
-    <groupId>jakarta.servlet.jsp.jstl</groupId>
-    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-</dependency>
+<script type="text/javascript" src="resources/js/jquery.js"></script>
 
-<dependency>
-    <groupId>org.glassfish.web</groupId>
-    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-</dependency>
+<script type="text/javascript">
+    if (!$.browser) {
+        $.browser = {};
+    }
+    $.browser.msie = navigator.userAgent.indexOf("MSIE") >= 0;
+</script>
