@@ -1,13 +1,16 @@
 <script type="text/javascript" src="resources/js/jquery.js"></script>
 
+<!-- other JS files -->
+
 <script type="text/javascript">
-    jQuery.browser = {
-        msie: /msie/.test(navigator.userAgent.toLowerCase()),
-        mozilla: /mozilla/.test(navigator.userAgent.toLowerCase())
-                  && !/(compatible|webkit)/.test(navigator.userAgent.toLowerCase()),
-        webkit: /webkit/.test(navigator.userAgent.toLowerCase()),
-        opera: /opera/.test(navigator.userAgent.toLowerCase())
-    };
+    if (typeof jQuery !== "undefined") {
+        jQuery.browser = jQuery.browser || {};
+        jQuery.browser.msie = false;
+        jQuery.browser.mozilla = false;
+        jQuery.browser.webkit = true;
+        jQuery.browser.opera = false;
+        jQuery.browser.version = "0";
+    }
 </script>
 
-<script type="text/javascript" src="resources/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="resources/js/jquery.jqGrid.min.4.3.1.js"></script>
