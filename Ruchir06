@@ -1,6 +1,1 @@
-jQuery.browser = jQuery.browser || {};
-jQuery.browser.msie = false;
-jQuery.browser.mozilla = false;
-jQuery.browser.webkit = true;
-jQuery.browser.opera = false;
-jQuery.browser.version = "0";
+jQuery('.getParticularProductDetails').on("change", function(e) {
