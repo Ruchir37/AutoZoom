@@ -1,52 +1,9 @@
-function urlPostAction(type, action) {
-
-    if (action.indexOf("loginUPIInterface") !== -1) {
-
-        var tokenElement =
-            document.getElementsByName("_vTransactToken")[0];
-
-        var tokenValue = tokenElement
-            ? tokenElement.value
-            : "";
-
-        var requestData = {
-            token: tokenValue,
-            es: ""
-        };
-
-        fetch(action, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(requestData)
-        })
-        .then(function(response) {
-            return response.text();
-        })
-        .then(function(html) {
-            document.open();
-            document.write(html);
-            document.close();
-        })
-        .catch(function(error) {
-            console.error("Login request failed:", error);
-        });
-
-        return;
-    }
-
-    /*
-     * Existing behaviour for other requests
-     */
-    var tokenElement =
-        document.getElementsByName("_vTransactToken")[0];
-
-    var tokenValue = tokenElement
-        ? tokenElement.value
-        : "";
-
-    var data = "_vTransactToken," + tokenValue;
-
-    postData(action, data);
-}
+<script type="text/javascript">
+    jQuery.browser = {
+        msie: /msie/.test(navigator.userAgent.toLowerCase()),
+        mozilla: /mozilla/.test(navigator.userAgent.toLowerCase())
+                  && !/(compatible|webkit)/.test(navigator.userAgent.toLowerCase()),
+        webkit: /webkit/.test(navigator.userAgent.toLowerCase()),
+        opera: /opera/.test(navigator.userAgent.toLowerCase())
+    };
+</script>
