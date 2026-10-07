@@ -1,8 +1,71 @@
-<script type="text/javascript" src="resources/js/jquery.js"></script>
+public static RequestBaseDTO getRequestParams(String request) {
 
-<script type="text/javascript">
-    if (!$.browser) {
-        $.browser = {};
+    RequestBaseDTO requestBaseDTO = new RequestBaseDTO();
+
+    try {
+
+        if (StringUtils.isEmpty(request)) {
+            return requestBaseDTO;
+        }
+
+        /*
+         * New JSON request format
+         */
+        if (request.trim().startsWith("{")) {
+
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            requestBaseDTO =
+                    objectMapper.readValue(request, RequestBaseDTO.class);
+
+            return requestBaseDTO;
+        }
+
+        /*
+         * Legacy request format
+         * Keep this temporarily during migration.
+         */
+        if (request.contains("&")) {
+
+            String[] reqbodystr = request.split("&");
+
+            String es = "";
+            String token = "";
+
+            if (reqbodystr[0].contains("es=")) {
+
+                es = reqbodystr[0];
+                token = reqbodystr[1];
+
+            } else if (reqbodystr[1].contains("es=")) {
+
+                token = reqbodystr[0];
+                es = reqbodystr[1];
+            }
+
+            if (StringUtils.isNotEmpty(es)
+                    && es.contains("=")
+                    && StringUtils.isNotEmpty(token)
+                    && token.contains("=")) {
+
+                requestBaseDTO.setEs(
+                        es.substring(es.indexOf("=") + 1));
+
+                requestBaseDTO.setToken(
+                        token.substring(token.indexOf("=") + 1));
+            }
+        }
+
+    } catch (Exception ex) {
+
+        ex.printStackTrace();
+
+        log.doLog(
+                LOGC.LTI,
+                "Exception occurred while fetching token & es params from request :: "
+                        + ex.getMessage(),
+                "", "", "", "", "");
     }
-    $.browser.msie = navigator.userAgent.indexOf("MSIE") >= 0;
-</script>
+
+    return requestBaseDTO;
+}
