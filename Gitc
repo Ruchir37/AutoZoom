@@ -1,58 +1,23 @@
-@RequestMapping(
-        value = {"/getUPILiteEnquiryLanding"},
-        method = {RequestMethod.POST}
-)
+@RequestMapping(value = "/getUPILiteEnquiryLanding",
+                method = RequestMethod.POST)
 public String getUPILiteEnquiryLanding(
         Model model,
-        @ModelAttribute("UPILiteEnquiryDTO") UPILiteEnquiryDTO upiliteEnquiryDTO,
+        @ModelAttribute("UPILiteEnquiryDTO") UPILiteEnquiryDTO UPILiteEnquiryDTO,
         Locale locale) {
 
     String methodName = "getUPILiteEnquiryLanding";
+
     String ipAddress = this.sessionDTO.getIpAddress();
     String loginId = this.sessionDTO.getLoginID();
 
-    Log.doLog(
-            2,
-            getClass().getSimpleName(),
-            methodName,
+    Log.doLog(2, getClass().getSimpleName(), methodName,
             "getUPILiteEnquiryLanding>>>>",
-            ipAddress,
-            "",
-            loginId
-    );
+            ipAddress, "", loginId);
 
     List<UPILiteEnquiryDTO> upiliteEnqTxn = new ArrayList<>();
 
-    try {
-
-        // Make sure the form backing object is available to JSP
-        model.addAttribute("UPILiteEnquiryDTO", upiliteEnquiryDTO);
-
-        // Transaction list for the landing page
-        model.addAttribute("upiliteEnqTxn", upiliteEnqTxn);
-
-    } catch (Exception e) {
-
-        Log.doLog(
-                2,
-                getClass().getSimpleName(),
-                methodName,
-                "getUPILiteEnquiryLanding :::::",
-                e.getMessage(),
-                "",
-                ""
-        );
-    }
-
-    Log.doLog(
-            2,
-            getClass().getSimpleName(),
-            methodName,
-            "getUPILiteEnquiryLanding Completed>>>>",
-            this.sessionDTO.getIpAddress(),
-            this.sessionDTO.getStoreID(),
-            this.sessionDTO.getLoginID()
-    );
+    model.addAttribute("UPILiteEnquiryDTO", UPILiteEnquiryDTO);
+    model.addAttribute("upiliteEnqTxn", upiliteEnqTxn);
 
     return "upiLiteEnquiry";
 }
