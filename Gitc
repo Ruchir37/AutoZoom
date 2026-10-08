@@ -1,23 +1,22 @@
-@RequestMapping(value = "/getUPILiteEnquiryLanding",
-                method = RequestMethod.POST)
-public String getUPILiteEnquiryLanding(
-        Model model,
-        @ModelAttribute("UPILiteEnquiryDTO") UPILiteEnquiryDTO UPILiteEnquiryDTO,
-        Locale locale) {
+<c:set var="UPILiteEnquiryDTO" value="${UPILiteEnquiryDTO}" />
 
-    String methodName = "getUPILiteEnquiryLanding";
+<form:form modelAttribute="UPILiteEnquiryDTO"
+           method="POST"
+           action="dwnIndReport"
+           id="reportForm"
+           onsubmit="return encodeForm(this);">
 
-    String ipAddress = this.sessionDTO.getIpAddress();
-    String loginId = this.sessionDTO.getLoginID();
+    <input type="hidden"
+           id="_vTransactToken"
+           name="_vTransactToken"
+           value="${_vTransactToken}" />
 
-    Log.doLog(2, getClass().getSimpleName(), methodName,
-            "getUPILiteEnquiryLanding>>>>",
-            ipAddress, "", loginId);
+    ...
 
-    List<UPILiteEnquiryDTO> upiliteEnqTxn = new ArrayList<>();
-
-    model.addAttribute("UPILiteEnquiryDTO", UPILiteEnquiryDTO);
-    model.addAttribute("upiliteEnqTxn", upiliteEnqTxn);
-
-    return "upiLiteEnquiry";
-}
+    <form:input type="text"
+                placeholder="Mobile Number"
+                readonly="false"
+                path="prdMobile"
+                id="prdMobile"
+                onclick="resetUPILite('mobile');"
+                cssClass="form-control" />
