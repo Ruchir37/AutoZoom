@@ -1,4 +1,15 @@
 String jwtToken = jwtTokenService.generateToken(
         userInfoDTO.getLoginId());
 
+if (jwtToken != null && !jwtToken.isEmpty()) {
+    log.info("JWT generated successfully for user: {}",
+            userInfoDTO.getLoginId());
+    log.info("JWT token length: {}", jwtToken.length());
+    log.info("JWT format valid: {}",
+            jwtToken.split("\\.").length == 3);
+} else {
+    log.error("JWT generation failed for user: {}",
+            userInfoDTO.getLoginId());
+}
+
 model.addAttribute("jwtToken", jwtToken);
