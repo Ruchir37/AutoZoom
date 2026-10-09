@@ -1,14 +1,11 @@
-InputStream inputStream =
-        VTransactUtil.class.getClassLoader()
-                .getResourceAsStream("EmailContent.properties");
+try (InputStream in = VTransactUtil.class
+        .getClassLoader()
+        .getResourceAsStream("EmailContent.properties")) {
 
-if (inputStream == null) {
-    throw new IllegalStateException(
-            "EmailContent.properties not found in classpath");
-}
+    if (in == null) {
+        throw new IllegalStateException(
+                "EmailContent.properties not found in classpath");
+    }
 
-Properties prop = new Properties();
-
-try (InputStream in = inputStream) {
     prop.load(in);
 }
