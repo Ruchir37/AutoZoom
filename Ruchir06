@@ -1,1 +1,13 @@
-jQuery('.getParticularProductDetails').on("change", function(e) {
+inputStream = SecurityUtil.class.getClassLoader()
+        .getResourceAsStream("config.properties");
+
+inputStream1 = SecurityUtil.class.getClassLoader()
+        .getResourceAsStream("key.properties");
+
+if (inputStream == null || inputStream1 == null) {
+    throw new IllegalStateException(
+            "config.properties or key.properties not found in classpath");
+}
+
+prop.load(inputStream1);
+prop.load(inputStream);
