@@ -1,15 +1,6 @@
 String jwtToken = jwtTokenService.generateToken(
-        userInfoDTO.getLoginId());
+        String.valueOf(tellerLoginDTO.getTid()));
 
-if (jwtToken != null && !jwtToken.isEmpty()) {
-    log.info("JWT generated successfully for user: {}",
-            userInfoDTO.getLoginId());
-    log.info("JWT token length: {}", jwtToken.length());
-    log.info("JWT format valid: {}",
-            jwtToken.split("\\.").length == 3);
-} else {
-    log.error("JWT generation failed for user: {}",
-            userInfoDTO.getLoginId());
-}
+request.getSession(true).setAttribute("JWT_TOKEN", jwtToken);
 
-model.addAttribute("jwtToken", jwtToken);
+log.info("JWT generated successfully for local dummy login");
