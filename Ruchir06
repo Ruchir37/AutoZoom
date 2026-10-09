@@ -1,23 +1,19 @@
-static {
-    try {
-        prop = new Properties();
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-api</artifactId>
+    <version>0.12.6</version>
+</dependency>
 
-        try (InputStream in = VTransactUtil.class
-                .getClassLoader()
-                .getResourceAsStream("EmailContent.properties")) {
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-impl</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
 
-            if (in == null) {
-                throw new IllegalStateException(
-                        "EmailContent.properties not found in classpath");
-            }
-
-            prop.load(in);
-        }
-
-    } catch (Exception ex) {
-        log.doLog(LOCG.LTE, "VTransactUtil",
-                "VTransactUtil Static Block",
-                "Error: Failed to read property file. Exception Stack: "
-                        + getStackTrace(ex), "", "", "");
-    }
-}
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt-jackson</artifactId>
+    <version>0.12.6</version>
+    <scope>runtime</scope>
+</dependency>
