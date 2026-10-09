@@ -1,11 +1,23 @@
-try (InputStream in = VTransactUtil.class
-        .getClassLoader()
-        .getResourceAsStream("EmailContent.properties")) {
+static {
+    try {
+        prop = new Properties();
 
-    if (in == null) {
-        throw new IllegalStateException(
-                "EmailContent.properties not found in classpath");
+        try (InputStream in = VTransactUtil.class
+                .getClassLoader()
+                .getResourceAsStream("EmailContent.properties")) {
+
+            if (in == null) {
+                throw new IllegalStateException(
+                        "EmailContent.properties not found in classpath");
+            }
+
+            prop.load(in);
+        }
+
+    } catch (Exception ex) {
+        log.doLog(LOCG.LTE, "VTransactUtil",
+                "VTransactUtil Static Block",
+                "Error: Failed to read property file. Exception Stack: "
+                        + getStackTrace(ex), "", "", "");
     }
-
-    prop.load(in);
 }
