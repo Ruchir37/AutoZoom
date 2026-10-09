@@ -1,6 +1,4 @@
-String jwtToken = jwtTokenService.generateToken(
-        String.valueOf(tellerLoginDTO.getTid()));
+String storedJwt = (String) request.getSession()
+        .getAttribute("JWT_TOKEN");
 
-request.getSession(true).setAttribute("JWT_TOKEN", jwtToken);
-
-log.info("JWT generated successfully for local dummy login");
+log.info("JWT stored in session: {}", storedJwt != null);
