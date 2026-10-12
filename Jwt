@@ -1,18 +1,12 @@
 
-try {
-    jwtTokenService.validateToken(token);
+function urlPostAction(type, action) {
+    var tokenElement = document.getElementsByName("_vTransactToken")[0];
 
-    log.info("JWT validation passed for request: {}",
-            request.getRequestURI());
+    if (!tokenElement || !tokenElement.value) {
+        console.error("Legacy token is missing.");
+        return;
+    }
 
-} catch (Exception ex) {
-    log.warn("JWT validation failed for request: {} ({})",
-            request.getRequestURI(),
-            ex.getClass().getSimpleName());
-
-    response.sendError(
-            HttpServletResponse.SC_UNAUTHORIZED,
-            "Invalid or expired authentication token");
-
-    return;
+    var data = "_vTransactToken," + tokenElement.value;
+    postData(action, data);
 }
