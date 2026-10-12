@@ -1,18 +1,9 @@
-@Override
-protected boolean shouldNotFilter(HttpServletRequest request) {
-    String path = request.getRequestURI()
-            .substring(request.getContextPath().length());
-
-    return path.startsWith("/resources/")
-            || path.startsWith("/fonts/")
-            || path.startsWith("/images/")
-            || path.endsWith(".css")
-            || path.endsWith(".js")
-            || path.endsWith(".png")
-            || path.endsWith(".jpg")
-            || path.endsWith(".jpeg")
-            || path.endsWith(".gif")
-            || path.endsWith(".woff")
-            || path.endsWith(".woff2")
-            || path.endsWith(".ico");
+try {
+    jwtTokenService.validateToken(token);
+    log.info("JWT validation passed for request: {}",
+            request.getRequestURI());
+} catch (Exception ex) {
+    log.warn("JWT validation failed for request: {} ({})",
+            request.getRequestURI(),
+            ex.getClass().getSimpleName());
 }
