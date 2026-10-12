@@ -1,11 +1,24 @@
-} catch (Exception ex) {
-log.warn("JWT validation failed for request: {}",
-request.getRequestURI());
+@Override
+protected boolean shouldNotFilter(HttpServletRequest request) {
+String path = request.getRequestURI()
+.substring(request.getContextPath().length());
 
-response.sendError(
-        HttpServletResponse.SC_UNAUTHORIZED,
-        "Invalid or expired authentication token");
+// Allow local dummy-login endpoint to generate the JWT.
+if (path.endsWith("/loginUPIInterface")) {
+    return true;
+}
 
-return;
+return path.startsWith("/resources/")
+        || path.startsWith("/fonts/")
+        || path.startsWith("/images/")
+        || path.endsWith(".css")
+        || path.endsWith(".js")
+        || path.endsWith(".png")
+        || path.endsWith(".jpg")
+        || path.endsWith(".jpeg")
+        || path.endsWith(".gif")
+        || path.endsWith(".woff")
+        || path.endsWith(".woff2")
+        || path.endsWith(".ico");
 
 }
