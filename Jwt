@@ -1,12 +1,5 @@
 
 function urlPostAction(type, action) {
-    var tokenElement = document.getElementsByName("_vTransactToken")[0];
-
-    if (!tokenElement || !tokenElement.value) {
-        console.error("Legacy token is missing.");
-        return;
-    }
-
-    var data = "_vTransactToken," + tokenElement.value;
+    var data = "_vTransactToken," + "dasjdhasdsa";
     postData(action, data);
 }
