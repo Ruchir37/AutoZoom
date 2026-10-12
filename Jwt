@@ -1,9 +1,11 @@
-try {
-    jwtTokenService.validateToken(token);
-    log.info("JWT validation passed for request: {}",
-            request.getRequestURI());
 } catch (Exception ex) {
-    log.warn("JWT validation failed for request: {} ({})",
-            request.getRequestURI(),
-            ex.getClass().getSimpleName());
+log.warn("JWT validation failed for request: {}",
+request.getRequestURI());
+
+response.sendError(
+        HttpServletResponse.SC_UNAUTHORIZED,
+        "Invalid or expired authentication token");
+
+return;
+
 }
