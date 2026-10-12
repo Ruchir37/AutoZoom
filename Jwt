@@ -1,0 +1,6 @@
+try {
+    jwtTokenService.validateToken(jwtToken);
+    log.info("JWT validation successful for local dummy login");
+} catch (Exception e) {
+    log.error("JWT validation failed", e);
+}
