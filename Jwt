@@ -1,24 +1,27 @@
-@Override
-protected boolean shouldNotFilter(HttpServletRequest request) {
-String path = request.getRequestURI()
-.substring(request.getContextPath().length());
+HttpSession session = request.getSession(false);
 
-// Allow local dummy-login endpoint to generate the JWT.
-if (path.endsWith("/loginUPIInterface")) {
-    return true;
+if (session == null) {
+    log.warn("JWT rejected: no session for {}",
+            request.getRequestURI());
+
+    response.sendError(
+            HttpServletResponse.SC_UNAUTHORIZED,
+            "Authentication required: no session");
+    return;
 }
 
-return path.startsWith("/resources/")
-        || path.startsWith("/fonts/")
-        || path.startsWith("/images/")
-        || path.endsWith(".css")
-        || path.endsWith(".js")
-        || path.endsWith(".png")
-        || path.endsWith(".jpg")
-        || path.endsWith(".jpeg")
-        || path.endsWith(".gif")
-        || path.endsWith(".woff")
-        || path.endsWith(".woff2")
-        || path.endsWith(".ico");
+Object tokenObject = session.getAttribute("JWT_TOKEN");
 
+if (!(tokenObject instanceof String)
+        || ((String) tokenObject).isBlank()) {
+
+    log.warn("JWT rejected: missing token for {}",
+            request.getRequestURI());
+
+    response.sendError(
+            HttpServletResponse.SC_UNAUTHORIZED,
+            "Authentication required: JWT missing");
+    return;
 }
+
+String token = (String) tokenObject;
