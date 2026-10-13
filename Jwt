@@ -1,2 +1,8 @@
-
-Log.info("JWT FILTER HIT: {} {}", request.getMethod(), request.getRequestURI());
+if (tokenObject instanceof String) {
+    String token = (String) tokenObject;
+    session.setAttribute(
+        "JWT_TOKEN",
+        token.substring(0, token.length() - 1) + "X"
+    );
+    tokenObject = session.getAttribute("JWT_TOKEN");
+}
