@@ -1,2 +1,11 @@
-System.out.println("JWT_TOKEN exists in session: "
-        + (request.getSession().getAttribute("JWT_TOKEN") != null));
+<form:form id="reportForm" name="reportForm"
+    modelAttribute="searchCriteriaDTO"
+    commandName="searchCriteriaDTO"
+    action="${searchCusAndMerchantReport}" autocomplete="off"
+    onsubmit="removeSpace(this); encodeForm(this);">
+
+    <input type="hidden" name="JWT_TOKEN"
+           value="${sessionScope.JWT_TOKEN}" />
+
+    <form:hidden path="reportName" id="reportName"
+        value="${searchCriteriaDTO.reportName}" />
