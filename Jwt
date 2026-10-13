@@ -1,2 +1,19 @@
-System.out.println("JWT MIGRATION: VTransactAdminPortalFilter invoked: "
-        + ((HttpServletRequest) request).getRequestURI());
+
+@Override
+public Map<String, String> getExtraHiddenFields(
+        jakarta.servlet.http.HttpServletRequest request) {
+
+    Map<String, String> hiddenFields = new HashMap<>();
+
+    jakarta.servlet.http.HttpSession session = request.getSession(false);
+
+    if (session != null) {
+        Object jwt = session.getAttribute("JWT_TOKEN");
+
+        if (jwt instanceof String && !((String) jwt).isBlank()) {
+            hiddenFields.put("JWT_TOKEN", (String) jwt);
+        }
+    }
+
+    return hiddenFields;
+}
