@@ -8,12 +8,26 @@ public Map<String, String> getExtraHiddenFields(
     jakarta.servlet.http.HttpSession session = request.getSession(false);
 
     if (session != null) {
-        Object token = session.getAttribute(VTransactConstant.TOKEN_KEY);
+        Object jwt = session.getAttribute("JWT_TOKEN");
 
-        if (token instanceof String && !((String) token).isBlank()) {
-            hiddenFields.put(VTransactConstant.TOKEN_KEY, (String) token);
+        if (jwt instanceof String && !((String) jwt).isBlank()) {
+            hiddenFields.put("JWT_TOKEN", (String) jwt);
         }
     }
 
     return hiddenFields;
+}
+
+
+
+
+function urlPostAction(type, action) {
+    var tokenElement = document.getElementsByName("JWT_TOKEN")[0];
+
+    if (!tokenElement || !tokenElement.value) {
+        console.error("JWT token is missing.");
+        return;
+    }
+
+    postData(action, "JWT_TOKEN," + tokenElement.value);
 }
