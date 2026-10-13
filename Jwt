@@ -1,6 +1,5 @@
 
-
-private boolean isTokenValid(HttpServletRequest request) {
+private boolean isAjaxTokenValid(HttpServletRequest request) {
     jakarta.servlet.http.HttpSession session = request.getSession(false);
 
     if (session == null) {
@@ -8,7 +7,15 @@ private boolean isTokenValid(HttpServletRequest request) {
     }
 
     Object sessionJwt = session.getAttribute("JWT_TOKEN");
-    String requestJwt = request.getParameter("JWT_TOKEN");
+
+    // Accept JWT from the Authorization header.
+    String requestJwt = request.getHeader("Authorization");
+
+    if (requestJwt != null && requestJwt.startsWith("Bearer ")) {
+        requestJwt = requestJwt.substring(7).trim();
+    } else {
+        requestJwt = request.getParameter("JWT_TOKEN");
+    }
 
     if (!(sessionJwt instanceof String)
             || ((String) sessionJwt).isBlank()
@@ -17,7 +24,6 @@ private boolean isTokenValid(HttpServletRequest request) {
         return false;
     }
 
-    // The submitted JWT must match the JWT issued for this session.
     if (!sessionJwt.equals(requestJwt)) {
         return false;
     }
