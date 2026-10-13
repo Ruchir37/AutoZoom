@@ -1,33 +1,32 @@
 
-@Override
-public Map<String, String> getExtraHiddenFields(
-        jakarta.servlet.http.HttpServletRequest request) {
 
-    Map<String, String> hiddenFields = new HashMap<>();
-
+private boolean isTokenValid(HttpServletRequest request) {
     jakarta.servlet.http.HttpSession session = request.getSession(false);
 
-    if (session != null) {
-        Object jwt = session.getAttribute("JWT_TOKEN");
-
-        if (jwt instanceof String && !((String) jwt).isBlank()) {
-            hiddenFields.put("JWT_TOKEN", (String) jwt);
-        }
+    if (session == null) {
+        return false;
     }
 
-    return hiddenFields;
-}
+    Object sessionJwt = session.getAttribute("JWT_TOKEN");
+    String requestJwt = request.getParameter("JWT_TOKEN");
 
-
-
-
-function urlPostAction(type, action) {
-    var tokenElement = document.getElementsByName("JWT_TOKEN")[0];
-
-    if (!tokenElement || !tokenElement.value) {
-        console.error("JWT token is missing.");
-        return;
+    if (!(sessionJwt instanceof String)
+            || ((String) sessionJwt).isBlank()
+            || requestJwt == null
+            || requestJwt.isBlank()) {
+        return false;
     }
 
-    postData(action, "JWT_TOKEN," + tokenElement.value);
+    // The submitted JWT must match the JWT issued for this session.
+    if (!sessionJwt.equals(requestJwt)) {
+        return false;
+    }
+
+    try {
+        Claims claims = jwtTokenService.validateToken(requestJwt);
+        return claims.getSubject() != null
+                && !claims.getSubject().isBlank();
+    } catch (Exception ex) {
+        return false;
+    }
 }
