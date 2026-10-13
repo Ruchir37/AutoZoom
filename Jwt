@@ -1,2 +1,2 @@
-<input type="hidden" name="JWT_TOKEN"
-       value="${sessionScope.JWT_TOKEN}" />
+
+Log.info("JWT FILTER HIT: {} {}", request.getMethod(), request.getRequestURI());
