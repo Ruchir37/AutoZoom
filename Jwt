@@ -1,5 +1,19 @@
 
-function urlPostAction(type, action) {
-    var data = "_vTransactToken," + "dasjdhasdsa";
-    postData(action, data);
+@Override
+public Map<String, String> getExtraHiddenFields(
+        jakarta.servlet.http.HttpServletRequest request) {
+
+    Map<String, String> hiddenFields = new HashMap<>();
+
+    jakarta.servlet.http.HttpSession session = request.getSession(false);
+
+    if (session != null) {
+        Object token = session.getAttribute(VTransactConstant.TOKEN_KEY);
+
+        if (token instanceof String && !((String) token).isBlank()) {
+            hiddenFields.put(VTransactConstant.TOKEN_KEY, (String) token);
+        }
+    }
+
+    return hiddenFields;
 }
