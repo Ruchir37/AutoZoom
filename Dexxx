@@ -1,5 +1,2 @@
--encryptstrings Encrypts sensitive strings embedded in the application to reduce exposure of hardcoded information through reverse engineering.
--encryptclasses Encrypts or protects application classes to make unauthorized code inspection and reverse engineering more difficult.
--encryptresources Encrypts application resources to mitigate unauthorized resource extraction and analysis.
--obfuscatecode Obfuscates application code to impede reverse engineering and make security-sensitive implementation details harder to understand.
-threatcastapikey Protects the ThreatCast API key configuration to reduce the risk of unauthorized use or exposure of the security service credentials.
+encryptresourcefiles Encrypts application resource files to reduce unauthorized extraction and exposure of embedded resources.
+-encryptassetfiles Encrypts application asset files to protect embedded assets from unauthorized access and extraction.
