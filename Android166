@@ -20,7 +20,7 @@ private void applyWindowInsets() {
                 initialLeft + insets.left,
                 initialTop + insets.top,
                 initialRight + insets.right,
-                initialBottom + insets.bottom
+                initialBottom
         );
 
         return windowInsets;
