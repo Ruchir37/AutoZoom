@@ -1,1 +1,59 @@
-<item name="bottom_sheet_original_margin_tag" type="id"/>
+
+private void applyWindowInsets() {
+    View decorView = getWindow().getDecorView();
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+            decorView,
+            (view, windowInsets) -> {
+                View rootView = findViewById(android.R.id.content);
+
+                if (rootView == null || rootView.getChildCount() == 0) {
+                    return windowInsets;
+                }
+
+                View appRoot = rootView.getChildAt(0);
+
+                Insets insets = windowInsets.getInsets(
+                        WindowInsetsCompat.Type.systemBars()
+                );
+
+                // Keep the original padding so repeated inset dispatch
+                // does not accumulate padding.
+                Object tag = appRoot.getTag(
+                        R.id.window_insets_original_padding
+                );
+
+                int[] originalPadding;
+
+                if (tag instanceof int[]) {
+                    originalPadding = (int[]) tag;
+                } else {
+                    originalPadding = new int[]{
+                            appRoot.getPaddingLeft(),
+                            appRoot.getPaddingTop(),
+                            appRoot.getPaddingRight(),
+                            appRoot.getPaddingBottom()
+                    };
+
+                    appRoot.setTag(
+                            R.id.window_insets_original_padding,
+                            originalPadding
+                    );
+                }
+
+                appRoot.setPadding(
+                        originalPadding[0] + insets.left,
+                        originalPadding[1] + insets.top,
+                        originalPadding[2] + insets.right,
+                        originalPadding[3]
+                );
+
+                return windowInsets;
+            }
+    );
+
+    ViewCompat.requestApplyInsets(decorView);
+}
+
+
+<item name="window_insets_original_padding" type="id" />
