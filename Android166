@@ -1,31 +1,35 @@
 
-
 private void applyWindowInsets() {
-    View content = findViewById(android.R.id.content);
+    final View decorView = getWindow().getDecorView();
+    final View content = findViewById(android.R.id.content);
 
     if (content == null) {
         return;
     }
 
-    ViewCompat.setOnApplyWindowInsetsListener(content,
+    final int initialLeft = content.getPaddingLeft();
+    final int initialTop = content.getPaddingTop();
+    final int initialRight = content.getPaddingRight();
+    final int initialBottom = content.getPaddingBottom();
+
+    ViewCompat.setOnApplyWindowInsetsListener(
+            decorView,
             (view, windowInsets) -> {
 
-                Insets insets = windowInsets.getInsets(
+                Insets bars = windowInsets.getInsets(
                         WindowInsetsCompat.Type.systemBars()
                 );
 
-                // Apply only the top and side insets.
-                // Do not modify bottom padding, which can move
-                // the copyright label and create blank space.
-                view.setPadding(
-                        insets.left,
-                        insets.top,
-                        insets.right,
-                        view.getPaddingBottom()
+                content.setPadding(
+                        initialLeft + bars.left,
+                        initialTop + bars.top,
+                        initialRight + bars.right,
+                        initialBottom + bars.bottom
                 );
 
                 return windowInsets;
-            });
+            }
+    );
 
-    ViewCompat.requestApplyInsets(content);
+    ViewCompat.requestApplyInsets(decorView);
 }
