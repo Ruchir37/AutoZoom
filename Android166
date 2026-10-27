@@ -12,40 +12,16 @@ private void applyWindowInsets() {
     final int initialBottom = content.getPaddingBottom();
 
     ViewCompat.setOnApplyWindowInsetsListener(content, (view, windowInsets) -> {
-        Insets systemBars = windowInsets.getInsets(
+        Insets insets = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
         );
 
-        // Apply top and side insets to the activity content.
-        // Keep bottom padding unchanged to preserve screen layout.
         view.setPadding(
-                initialLeft + systemBars.left,
-                initialTop + systemBars.top,
-                initialRight + systemBars.right,
+                initialLeft + insets.left,
+                initialTop + insets.top,
+                initialRight + insets.right,
                 initialBottom
         );
-
-        // Protect the custom keypad from the navigation bar.
-        View keypad = view.findViewById(R.id.llCustomKeypad);
-
-        if (keypad != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(keypad, (keypadView, keypadInsets) -> {
-                Insets navInsets = keypadInsets.getInsets(
-                        WindowInsetsCompat.Type.navigationBars()
-                );
-
-                keypadView.setPadding(
-                        keypadView.getPaddingLeft(),
-                        keypadView.getPaddingTop(),
-                        keypadView.getPaddingRight(),
-                        navInsets.bottom
-                );
-
-                return keypadInsets;
-            });
-
-            ViewCompat.requestApplyInsets(keypad);
-        }
 
         return windowInsets;
     });
