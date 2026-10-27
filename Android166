@@ -12,16 +12,27 @@ private void applyWindowInsets() {
     final int initialBottom = content.getPaddingBottom();
 
     ViewCompat.setOnApplyWindowInsetsListener(content, (view, windowInsets) -> {
-        Insets insets = windowInsets.getInsets(
+        Insets systemBars = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
         );
 
         view.setPadding(
-                initialLeft + insets.left,
-                initialTop + insets.top,
-                initialRight + insets.right,
+                initialLeft + systemBars.left,
+                initialTop + systemBars.top,
+                initialRight + systemBars.right,
                 initialBottom
         );
+
+        View keypad = findViewById(R.id.bottomNestedScrollView);
+
+        if (keypad != null) {
+            keypad.setPadding(
+                    keypad.getPaddingLeft(),
+                    keypad.getPaddingTop(),
+                    keypad.getPaddingRight(),
+                    systemBars.bottom
+            );
+        }
 
         return windowInsets;
     });
