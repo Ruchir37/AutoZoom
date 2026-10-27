@@ -12,16 +12,56 @@ private void applyWindowInsets() {
     final int initialBottom = content.getPaddingBottom();
 
     ViewCompat.setOnApplyWindowInsetsListener(content, (view, windowInsets) -> {
-        Insets insets = windowInsets.getInsets(
+        Insets systemBars = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
         );
 
+        // Preserve existing content positioning.
         view.setPadding(
-                initialLeft + insets.left,
-                initialTop + insets.top,
-                initialRight + insets.right,
+                initialLeft + systemBars.left,
+                initialTop + systemBars.top,
+                initialRight + systemBars.right,
                 initialBottom
         );
+
+        // Adjust the bottom sheet, not the keypad's internal padding.
+        View bottomSheet = view.findViewById(
+                R.id.bottomNestedScrollView
+        );
+
+        if (bottomSheet != null) {
+            ViewGroup.LayoutParams params = bottomSheet.getLayoutParams();
+
+            if (params instanceof ViewGroup.MarginLayoutParams) {
+                ViewGroup.MarginLayoutParams margins =
+                        (ViewGroup.MarginLayoutParams) params;
+
+                // Capture the original margin once.
+                Object tag = bottomSheet.getTag(
+                        R.id.bottom_sheet_original_margin_tag
+                );
+
+                int originalBottomMargin;
+
+                if (tag instanceof Integer) {
+                    originalBottomMargin = (Integer) tag;
+                } else {
+                    originalBottomMargin = margins.bottomMargin;
+                    bottomSheet.setTag(
+                            R.id.bottom_sheet_original_margin_tag,
+                            originalBottomMargin
+                    );
+                }
+
+                int targetBottomMargin =
+                        originalBottomMargin + systemBars.bottom;
+
+                if (margins.bottomMargin != targetBottomMargin) {
+                    margins.bottomMargin = targetBottomMargin;
+                    bottomSheet.setLayoutParams(margins);
+                }
+            }
+        }
 
         return windowInsets;
     });
