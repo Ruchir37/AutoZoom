@@ -1,4 +1,3 @@
-
 private void applyWindowInsets() {
     View content = findViewById(android.R.id.content);
 
@@ -7,19 +6,20 @@ private void applyWindowInsets() {
     final int initialRight = content.getPaddingRight();
     final int initialBottom = content.getPaddingBottom();
 
-    ViewCompat.setOnApplyWindowInsetsListener(content, (v, windowInsets) -> {
+    ViewCompat.setOnApplyWindowInsetsListener(content, (view, windowInsets) -> {
         Insets insets = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
         );
 
-        v.setPadding(
+        view.setPadding(
                 initialLeft + insets.left,
                 initialTop + insets.top,
                 initialRight + insets.right,
                 initialBottom + insets.bottom
         );
 
-        return WindowInsetsCompat.CONSUMED;
+        // Allow child views to receive insets.
+        return windowInsets;
     });
 
     ViewCompat.requestApplyInsets(content);
