@@ -5,36 +5,54 @@
     android:layout_height="wrap_content"
     android:visibility="visible">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/alternativeMobileTextInputLayout"
-        style="@style/MediumBlackInputLayout"
+    <!-- Mobile icon + input -->
+    <LinearLayout
+        android:id="@+id/mobileInputContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:startIconDrawable="@drawable/ic_mobile">
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/alternateMobileEditText"
-            style="@style/MediumBlackEditText"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/alternativeMobileImageView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:digits="0123456789"
-            android:hint="Alternate Mobile Number"
-            android:inputType="number"
-            android:maxLength="10"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_mobile"
+            android:contentDescription="Mobile number" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/alternativeMobileTextInputLayout"
+            style="@style/MediumBlackInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
-    <!-- OTP Instruction -->
+            <EditText
+                android:id="@+id/alternateMobileEditText"
+                style="@style/MediumBlackEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:digits="0123456789"
+                android:hint="@string/alternative_number"
+                android:inputType="number"
+                android:maxLength="10"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <!-- OTP information -->
     <TextView
         android:id="@+id/alternateMobileHint"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/alternativeMobileTextInputLayout"
-        android:layout_marginTop="4dp"
+        android:layout_below="@id/mobileInputContainer"
+        android:layout_marginTop="8dp"
         android:text="OTP will be generated and sent on your primary mobile number"
-        android:textSize="14sp"
-        android:textColor="@color/gray"
-        android:visibility="visible" />
+        android:textColor="#757575"
+        android:textSize="14sp" />
 
 </RelativeLayout>
