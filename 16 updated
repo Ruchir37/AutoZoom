@@ -1,33 +1,9 @@
-
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.tabs.TabLayout
+    android:id="@+id/tabLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:minHeight="80dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp">
-
-    <ImageView
-        android:id="@+id/tabIconImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="4dp"
-        android:scaleType="fitCenter"
-        android:contentDescription="@null" />
-
-    <TextView
-        android:id="@+id/tabNameTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:fontFamily="sans"
-        android:textSize="11sp"
-        android:textColor="@drawable/tab_text_selector"
-        android:singleLine="false"
-        android:maxLines="2"
-        android:ellipsize="none" />
-
-</LinearLayout>
+    app:tabMinHeight="80dp"
+    app:tabGravity="fill"
+    app:tabMode="fixed"
+    app:tabPaddingTop="4dp"
+    app:tabPaddingBottom="4dp" />
