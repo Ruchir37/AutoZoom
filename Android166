@@ -1,33 +1,40 @@
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_single_image"
+<RelativeLayout
+    android:id="@+id/alternateMobileLayout"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_gravity="bottom"
-    android:background="@color/gray">
+    android:layout_height="wrap_content"
+    android:visibility="visible">
 
-    <!-- Submit ImageView - TOP -->
-    <ImageView
-        android:id="@+id/submitImageView"
-        android:layout_width="wrap_content"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/alternativeMobileTextInputLayout"
+        style="@style/MediumBlackInputLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:clickable="true"
-        android:src="@drawable/ic_done_dark_normal"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:startIconDrawable="@drawable/ic_mobile">
 
-    <!-- UPI Logo - BOTTOM -->
-    <ImageView
-        android:id="@+id/upiLogo"
-        android:layout_width="60dp"
-        android:layout_height="30dp"
-        android:src="@drawable/upi_logo_grey"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/alternateMobileEditText"
+            style="@style/MediumBlackEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="0123456789"
+            android:hint="Alternate Mobile Number"
+            android:inputType="number"
+            android:maxLength="10"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- OTP Instruction -->
+    <TextView
+        android:id="@+id/alternateMobileHint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/alternativeMobileTextInputLayout"
+        android:layout_marginTop="4dp"
+        android:text="OTP will be generated and sent on your primary mobile number"
+        android:textSize="14sp"
+        android:textColor="@color/gray"
+        android:visibility="visible" />
+
+</RelativeLayout>
